@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on Sat Dec 12 15:44:59 2020 by Eclipse SUMO GUI Version 1.7.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="grid-simulation/grid.net.xml"/>
+        <route-files value="grid-simulation/grid.rou.xml"/>
+    </input>
+
+    <output>
+        <tripinfo-output value="grid-simulation/tripinfo.xml"/>
+    </output>
+
+    <traci_server>
+        <remote-port value="56881"/>
+    </traci_server>
+
+    <gui_only>
+        <start value="true"/>
+    </gui_only>
+
+</configuration>
+-->
+
+<tripinfos xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/tripinfo_file.xsd">
+    <tripinfo id="0" depart="0.00" departLane="e1_0" departPos="3.60" departSpeed="0.00" departDelay="0.00" arrival="28.00" arrivalLane="e15_0" arrivalPos="20.00" arrivalSpeed="10.00" duration="28.00" routeLength="209.93" waitingTime="0.00" waitingCount="0" stopTime="0.00" timeLoss="6.19" rerouteNo="0" devices="tripinfo_0" vType="car" speedFactor="1.06" vaporized=""/>
+</tripinfos>
