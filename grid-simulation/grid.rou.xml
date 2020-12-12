@@ -1,60 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on Ven 11 Dic 17:03:22 2020 by Eclipse SUMO netedit Version 1.7.0
-<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
-
-    <input>
-        <sumo-net-file value="/Users/Matteo/Sumo/Sumo%20networks%20my%20trials/grid_trial/osm.net.xml"/>
-    </input>
-
-    <output>
-        <output-file value="/Users/Matteo/Sumo/Sumo%20networks%20my%20trials/grid_trial/osm.net.xml"/>
-    </output>
-
-    <processing>
-        <geometry.min-radius.fix.railways value="false"/>
-        <geometry.max-grade.fix value="false"/>
-        <offset.disable-normalization value="true"/>
-        <lefthand value="false"/>
-    </processing>
-
-    <junctions>
-        <no-turnarounds value="true"/>
-        <junctions.corner-detail value="5"/>
-        <junctions.limit-turn-speed value="5.5"/>
-        <rectangular-lane-cut value="false"/>
-    </junctions>
-
-    <pedestrian>
-        <walkingareas value="false"/>
-    </pedestrian>
-
-    <netedit>
-        <route-files value="/Users/Matteo/Sumo/Sumo%20networks%20my%20trials/grid_trial/deamand.rou.xml"/>
-    </netedit>
-
-    <report>
-        <aggregate-warnings value="5"/>
-    </report>
-
-</configuration>
--->
-
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
 
-    <vType id="car"
-            vClass="passenger" length="3.5" accel="3.5" decel="2.2"
-            sigma="0.0" maxSpeed="10" />
+    <vType id="car" length="3.50" maxSpeed="10.00" vClass="passenger" accel="3.5" decel="2.2" sigma="0.0"/>
 
-    <route id="route_0" edges="e1 e3 e5 e7 e9 e11 e13 e15" color="yellow"/>
+    <route edges="e12 e23 e36 e67" color="yellow" id="route_0"/>
 
-    <!-- 
-    <flow id="carflow" type="car" begin="0" end="0" number="5" from="e1" to="e15" via="e7"/>
-    <trip id="trip0" type="car" depart="0.00" from="e2" to="e10"/>
-     -->
-
-    <vehicle id="0" type="car" route="route_0" depart="0" />
-
-    
+    <vehicle id="car_0" type="car" depart="0.00" route="route_0"/>
 
 </routes>

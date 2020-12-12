@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<edges xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/edges_file.xsd">
+
+    <edge id="e12" from="n1" to="n2" type="normal_road"/>
+    <edge id="e21" from="n2" to="n1" type="normal_road"/>
+    <edge id="e23" from="n2" to="n3" type="normal_road"/>
+    <edge id="e32" from="n3" to="n2" type="normal_road"/>
+    <edge id="e34" from="n3" to="n4" type="normal_road"/>
+    <edge id="e43" from="n4" to="n3" type="normal_road"/>
+    <edge id="e41" from="n4" to="n1" type="normal_road"/>
+    <edge id="e14" from="n1" to="n4" type="normal_road"/>
+    <edge id="e25" from="n2" to="n5" type="normal_road"/>
+    <edge id="e52" from="n5" to="n2" type="normal_road"/>
+    <edge id="e56" from="n5" to="n6" type="normal_road"/>
+    <edge id="e65" from="n6" to="n5" type="normal_road"/>
+    <edge id="e67" from="n6" to="n7" type="normal_road"/>
+    <edge id="e76" from="n7" to="n6" type="normal_road"/>
+    <edge id="e78" from="n7" to="n8" type="normal_road"/>
+    <edge id="e87" from="n8" to="n7" type="normal_road"/>
+    <edge id="e89" from="n8" to="n9" type="normal_road"/>
+    <edge id="e98" from="n9" to="n8" type="normal_road"/>
+    <edge id="e94" from="n9" to="n4" type="normal_road"/>
+    <edge id="e49" from="n4" to="n9" type="normal_road"/>
+    <edge id="e36" from="n3" to="n6" type="normal_road"/>
+    <edge id="e63" from="n6" to="n3" type="normal_road"/>
+    <edge id="e38" from="n3" to="n8" type="normal_road"/>
+    <edge id="e83" from="n8" to="n3" type="normal_road"/>
+
+
+</edges>
