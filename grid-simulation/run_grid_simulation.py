@@ -1,15 +1,23 @@
 import os
 import sys
 import optparse
+from sumolib import checkBinary
+import traci
+from pathlib import Path
+
+simulation_name = 'grid.sumocfg'
+folder_path = Path('grid-simulation/')
+
+simulation_file = folder_path / simulation_name
+trip_info_file = folder_path / 'output-files' / 'tripinfo.xml'
+statistics_file = folder_path / 'output-files' / 'statistics_output.xml'
+custom_gui_view_file = 'custom_sumo_gui_view.xml'
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
     sys.path.append(tools)
 else:
     sys.exit("please declare environment variable 'SUMO_HOME'")
-
-from sumolib import checkBinary
-import traci
 
 def get_options():
     opt_parser = optparse.OptionParser()
@@ -38,10 +46,15 @@ if __name__ == '__main__':
         sumoBinary = checkBinary('sumo')
     else:
         sumoBinary = checkBinary('sumo-gui')
+
     # traci starts sumo as a subprocess and then this script connects and runs
-    traci.start([sumoBinary, '-c', 'grid-simulation/grid.sumocfg',
-                 '--tripinfo-output', 'grid-simulation/tripinfo.xml',
+    traci.start([sumoBinary, '--configuration-file', simulation_file,
                  '--start',
+                 '--seed', '42',
                  '--delay', '300',
-                 '--gui-settings-file', 'custom_gui_view.xml'])
+                 '--gui-settings-file', custom_gui_view_file,
+                 '--quit-on-end',
+                 '--tripinfo-output', trip_info_file,
+                 '--statistics-output', statistics_file])
+
     run()

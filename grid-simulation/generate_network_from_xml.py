@@ -2,9 +2,9 @@ import os
 import subprocess
 
 netconvert_command = 'netconvert ' \
-                     '--node-files=grid_plain_xml/nodes.nod.xml ' \
-                     '--edge-files=grid_plain_xml/edges.edg.xml ' \
-                     '--type-files=grid_plain_xml/edge_types.typ.xml ' \
+                     '--node-files=grid-plain-xml/nodes.nod.xml ' \
+                     '--edge-files=grid-plain-xml/edges.edg.xml ' \
+                     '--type-files=grid-plain-xml/edge_types.typ.xml ' \
                      '--output-file=grid.net.xml '
 
 if __name__ == '__main__':
