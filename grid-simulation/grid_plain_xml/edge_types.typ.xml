@@ -3,5 +3,8 @@
 <types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/types_file.xsd">
 
     <type id="normal_road" priority="0" numLanes="1" speed="13.9"/>
+    <type id="normal_road_2lanes" priority="0" numLanes="2" speed="13.9"/>
+    <type id="normal_road_3lanes" priority="0" numLanes="3" speed="13.9"/>
+    <type id="normal_road_4lanes" priority="0" numLanes="4" speed="13.9"/>
 
 </types>

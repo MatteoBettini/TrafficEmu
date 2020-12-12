@@ -41,5 +41,6 @@ if __name__ == '__main__':
     # traci starts sumo as a subprocess and then this script connects and runs
     traci.start([sumoBinary, '-c', 'grid-simulation/grid.sumocfg',
                  '--tripinfo-output', 'grid-simulation/tripinfo.xml',
-                 '--start'])
+                 '--start',
+                 '--delay', '300'])
     run()

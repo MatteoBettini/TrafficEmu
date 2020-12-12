@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on Sat Dec 12 18:12:30 2020 by Eclipse SUMO netconvert Version 1.8.0
+<!-- generated on Sat Dec 12 18:39:06 2020 by Eclipse SUMO netconvert Version 1.8.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
 
     <input>
@@ -25,6 +25,9 @@
     <location netOffset="0.00,0.00" convBoundary="0.00,0.00,100.00,100.00" origBoundary="0.00,0.00,100.00,100.00" projParameter="!"/>
 
     <type id="normal_road" priority="0" numLanes="1" speed="13.90"/>
+    <type id="normal_road_2lanes" priority="0" numLanes="2" speed="13.90"/>
+    <type id="normal_road_3lanes" priority="0" numLanes="3" speed="13.90"/>
+    <type id="normal_road_4lanes" priority="0" numLanes="4" speed="13.90"/>
 
     <edge id=":n1_0" function="internal">
         <lane id=":n1_0_0" index="0" speed="6.08" length="7.74" shape="-1.60,3.20 -1.30,1.10 -0.40,-0.40 1.10,-1.30 3.20,-1.60"/>
