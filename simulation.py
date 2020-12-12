@@ -42,5 +42,6 @@ if __name__ == '__main__':
     traci.start([sumoBinary, '-c', 'grid-simulation/grid.sumocfg',
                  '--tripinfo-output', 'grid-simulation/tripinfo.xml',
                  '--start',
-                 '--delay', '300'])
+                 '--delay', '300',
+                 '--gui-settings-file', 'custom_gui_view.xml'])
     run()
