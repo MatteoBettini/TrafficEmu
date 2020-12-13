@@ -5,6 +5,9 @@ from sumolib import checkBinary
 import traci
 from pathlib import Path
 
+simulation_seed = 42
+simulation_delay = 300
+
 simulation_name = 'grid.sumocfg'
 folder_path = Path(__file__).resolve().parent.absolute()
 
@@ -51,8 +54,8 @@ if __name__ == '__main__':
     # traci starts sumo as a subprocess and then this script connects and runs
     traci.start([sumoBinary, '--configuration-file', simulation_file,
                  '--start',
-                 '--seed', '42',
-                 '--delay', '300',
+                 '--seed', str(simulation_seed),
+                 '--delay', str(simulation_delay),
                  '--gui-settings-file', custom_gui_view_file,
                  '--quit-on-end',
                  '--tripinfo-output', trip_info_file,
