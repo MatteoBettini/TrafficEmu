@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on Sat Dec 12 23:40:08 2020 by Eclipse SUMO GUI Version 1.8.0
+<!-- generated on Sun Dec 13 11:20:50 2020 by Eclipse SUMO GUI Version 1.8.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
-        <net-file value="grid-simulation/grid.net.xml"/>
-        <route-files value="grid-simulation/grid.rou.xml"/>
+        <net-file value="/Users/Matteo/PycharmProjects/TrafficEmu/grid-simulation/grid.net.xml"/>
+        <route-files value="/Users/Matteo/PycharmProjects/TrafficEmu/grid-simulation/grid.rou.xml"/>
     </input>
 
     <output>
-        <tripinfo-output value="grid-simulation/output-files/tripinfo.xml"/>
-        <statistic-output value="grid-simulation/output-files/statistics_output.xml"/>
+        <tripinfo-output value="/Users/Matteo/PycharmProjects/TrafficEmu/grid-simulation/output-files/tripinfo.xml"/>
+        <statistic-output value="/Users/Matteo/PycharmProjects/TrafficEmu/grid-simulation/output-files/statistics_output.xml"/>
     </output>
 
     <traci_server>
-        <remote-port value="52764"/>
+        <remote-port value="54845"/>
     </traci_server>
 
     <random_number>
@@ -22,7 +22,7 @@
     </random_number>
 
     <gui_only>
-        <gui-settings-file value="custom_sumo_gui_view.xml"/>
+        <gui-settings-file value="/Users/Matteo/PycharmProjects/TrafficEmu/custom_sumo_gui_view.xml"/>
         <quit-on-end value="true"/>
         <start value="true"/>
         <delay value="300"/>
@@ -36,7 +36,7 @@
     <teleports total="0" jam="0" yield="0" wrongLane="0"/>
     <safety collisions="0" emergencyStops="0"/>
     <persons loaded="0" running="0" jammed="0"/>
-    <vehicleTripStatistics routeLength="133.10" speed="6.94" duration="19.50" waitingTime="0.25" timeLoss="5.14" departDelay="1.00" departDelayWaiting="-1"/>
+    <vehicleTripStatistics routeLength="133.10" speed="4.47" duration="30.50" waitingTime="4.50" timeLoss="16.37" departDelay="1.00" departDelayWaiting="-1"/>
     <pedestrianStatistics number="0" routeLength="0.00" duration="0.00" timeLoss="0.00"/>
     <rideStatistics number="0"/>
     <transportStatistics number="0"/>
