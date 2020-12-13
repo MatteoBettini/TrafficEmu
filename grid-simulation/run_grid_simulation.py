@@ -6,12 +6,12 @@ import traci
 from pathlib import Path
 
 simulation_name = 'grid.sumocfg'
-folder_path = Path('grid-simulation/')
+folder_path = Path(__file__).resolve().parent.absolute()
 
 simulation_file = folder_path / simulation_name
 trip_info_file = folder_path / 'output-files' / 'tripinfo.xml'
 statistics_file = folder_path / 'output-files' / 'statistics_output.xml'
-custom_gui_view_file = 'custom_sumo_gui_view.xml'
+custom_gui_view_file = '../custom_sumo_gui_view.xml'
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -47,6 +47,7 @@ if __name__ == '__main__':
     else:
         sumoBinary = checkBinary('sumo-gui')
 
+    print()
     # traci starts sumo as a subprocess and then this script connects and runs
     traci.start([sumoBinary, '--configuration-file', simulation_file,
                  '--start',
