@@ -12,8 +12,8 @@ simulation_name = 'grid.sumocfg'
 folder_path = Path(__file__).resolve().parent.absolute()
 
 simulation_file = folder_path / simulation_name
-trip_info_file = folder_path / 'output-files' / 'tripinfo.xml'
-statistics_file = folder_path / 'output-files' / 'statistics_output.xml'
+trip_info_file = folder_path / 'simulation-output-files' / 'tripinfo.xml'
+statistics_file = folder_path / 'simulation-output-files' / 'statistics_output.xml'
 custom_gui_view_file = folder_path.parent / 'custom_sumo_gui_view.xml'
 
 if 'SUMO_HOME' in os.environ:

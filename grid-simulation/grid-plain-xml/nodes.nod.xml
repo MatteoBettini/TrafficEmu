@@ -1,16 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" ?>
 <nodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/nodes_file.xsd">
-
-    <node id="n1" x="0" y="0" type="allway_stop" keepClear="true"/>
-    <node id="n2" x="50" y="0" type="allway_stop" keepClear="true"/>
-    <node id="n3" x="50" y="50" type="allway_stop" keepClear="true"/>
-    <node id="n4" x="0" y="50" type="allway_stop" keepClear="true"/>
-    <node id="n5" x="100" y="0" type="allway_stop" keepClear="true"/>
-    <node id="n6" x="100" y="50" type="allway_stop" keepClear="true"/>
-    <node id="n7" x="100" y="100" type="allway_stop" keepClear="true"/>
-    <node id="n8" x="50" y="100" type="allway_stop" keepClear="true"/>
-    <node id="n9" x="0" y="100" type="allway_stop" keepClear="true"/>
-
+	<node id="n1" type="allway_stop" x="0" y="0"/>
+	<node id="n2" type="allway_stop" x="50" y="0"/>
+	<node id="n3" type="allway_stop" x="50" y="50"/>
+	<node id="n4" type="allway_stop" x="0" y="50"/>
+	<node id="n5" type="allway_stop" x="100" y="0"/>
+	<node id="n6" type="allway_stop" x="100" y="50"/>
+	<node id="n7" type="allway_stop" x="100" y="100"/>
+	<node id="n8" type="allway_stop" x="50" y="100"/>
+	<node id="n9" type="allway_stop" x="0" y="100"/>
+	<node id="n10" type="allway_stop" x="150" y="0"/>
+	<node id="n11" type="allway_stop" x="150" y="50"/>
+	<node id="n12" type="allway_stop" x="150" y="100"/>
+	<node id="n13" type="allway_stop" x="150" y="150"/>
+	<node id="n14" type="allway_stop" x="100" y="150"/>
+	<node id="n15" type="allway_stop" x="50" y="150"/>
+	<node id="n16" type="allway_stop" x="0" y="150"/>
 </nodes>
-

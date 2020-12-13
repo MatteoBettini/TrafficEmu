@@ -1,32 +1,51 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-
+<?xml version="1.0" ?>
 <edges xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/edges_file.xsd">
-
-    <edge id="e12" from="n1" to="n2" type="normal_road"/>
-    <edge id="e21" from="n2" to="n1" type="normal_road"/>
-    <edge id="e23" from="n2" to="n3" type="normal_road"/>
-    <edge id="e32" from="n3" to="n2" type="normal_road"/>
-    <edge id="e34" from="n3" to="n4" type="normal_road"/>
-    <edge id="e43" from="n4" to="n3" type="normal_road"/>
-    <edge id="e41" from="n4" to="n1" type="normal_road"/>
-    <edge id="e14" from="n1" to="n4" type="normal_road"/>
-    <edge id="e25" from="n2" to="n5" type="normal_road"/>
-    <edge id="e52" from="n5" to="n2" type="normal_road"/>
-    <edge id="e56" from="n5" to="n6" type="normal_road"/>
-    <edge id="e65" from="n6" to="n5" type="normal_road"/>
-    <edge id="e67" from="n6" to="n7" type="normal_road"/>
-    <edge id="e76" from="n7" to="n6" type="normal_road"/>
-    <edge id="e78" from="n7" to="n8" type="normal_road"/>
-    <edge id="e87" from="n8" to="n7" type="normal_road"/>
-    <edge id="e89" from="n8" to="n9" type="normal_road"/>
-    <edge id="e98" from="n9" to="n8" type="normal_road"/>
-    <edge id="e94" from="n9" to="n4" type="normal_road"/>
-    <edge id="e49" from="n4" to="n9" type="normal_road"/>
-    <edge id="e36" from="n3" to="n6" type="normal_road"/>
-    <edge id="e63" from="n6" to="n3" type="normal_road"/>
-    <edge id="e38" from="n3" to="n8" type="normal_road"/>
-    <edge id="e83" from="n8" to="n3" type="normal_road"/>
-
-
+	<edge from="n1" id="e1to4" to="n4" type="normal_road"/>
+	<edge from="n4" id="e4to1" to="n1" type="normal_road"/>
+	<edge from="n1" id="e1to2" to="n2" type="normal_road"/>
+	<edge from="n2" id="e2to1" to="n1" type="normal_road"/>
+	<edge from="n2" id="e2to3" to="n3" type="normal_road"/>
+	<edge from="n3" id="e3to2" to="n2" type="normal_road"/>
+	<edge from="n3" id="e3to4" to="n4" type="normal_road"/>
+	<edge from="n4" id="e4to3" to="n3" type="normal_road"/>
+	<edge from="n4" id="e4to9" to="n9" type="normal_road"/>
+	<edge from="n9" id="e9to4" to="n4" type="normal_road"/>
+	<edge from="n3" id="e3to8" to="n8" type="normal_road"/>
+	<edge from="n8" id="e8to3" to="n3" type="normal_road"/>
+	<edge from="n3" id="e3to6" to="n6" type="normal_road"/>
+	<edge from="n6" id="e6to3" to="n3" type="normal_road"/>
+	<edge from="n2" id="e2to5" to="n5" type="normal_road"/>
+	<edge from="n5" id="e5to2" to="n2" type="normal_road"/>
+	<edge from="n5" id="e5to6" to="n6" type="normal_road"/>
+	<edge from="n6" id="e6to5" to="n5" type="normal_road"/>
+	<edge from="n6" id="e6to7" to="n7" type="normal_road"/>
+	<edge from="n7" id="e7to6" to="n6" type="normal_road"/>
+	<edge from="n7" id="e7to8" to="n8" type="normal_road"/>
+	<edge from="n8" id="e8to7" to="n7" type="normal_road"/>
+	<edge from="n8" id="e8to9" to="n9" type="normal_road"/>
+	<edge from="n9" id="e9to8" to="n8" type="normal_road"/>
+	<edge from="n9" id="e9to16" to="n16" type="normal_road"/>
+	<edge from="n16" id="e16to9" to="n9" type="normal_road"/>
+	<edge from="n8" id="e8to15" to="n15" type="normal_road"/>
+	<edge from="n15" id="e15to8" to="n8" type="normal_road"/>
+	<edge from="n7" id="e7to14" to="n14" type="normal_road"/>
+	<edge from="n14" id="e14to7" to="n7" type="normal_road"/>
+	<edge from="n7" id="e7to12" to="n12" type="normal_road"/>
+	<edge from="n12" id="e12to7" to="n7" type="normal_road"/>
+	<edge from="n6" id="e6to11" to="n11" type="normal_road"/>
+	<edge from="n11" id="e11to6" to="n6" type="normal_road"/>
+	<edge from="n5" id="e5to10" to="n10" type="normal_road"/>
+	<edge from="n10" id="e10to5" to="n5" type="normal_road"/>
+	<edge from="n10" id="e10to11" to="n11" type="normal_road"/>
+	<edge from="n11" id="e11to10" to="n10" type="normal_road"/>
+	<edge from="n11" id="e11to12" to="n12" type="normal_road"/>
+	<edge from="n12" id="e12to11" to="n11" type="normal_road"/>
+	<edge from="n12" id="e12to13" to="n13" type="normal_road"/>
+	<edge from="n13" id="e13to12" to="n12" type="normal_road"/>
+	<edge from="n13" id="e13to14" to="n14" type="normal_road"/>
+	<edge from="n14" id="e14to13" to="n13" type="normal_road"/>
+	<edge from="n14" id="e14to15" to="n15" type="normal_road"/>
+	<edge from="n15" id="e15to14" to="n14" type="normal_road"/>
+	<edge from="n15" id="e15to16" to="n16" type="normal_road"/>
+	<edge from="n16" id="e16to15" to="n15" type="normal_road"/>
 </edges>
