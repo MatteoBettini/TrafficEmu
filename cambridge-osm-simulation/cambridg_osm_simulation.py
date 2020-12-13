@@ -9,11 +9,15 @@ simulation_seed = 42
 simulation_delay = 100
 
 simulation_name = 'osm.sumocfg'
+simulation_output_dir = 'simulation-output-files'
 folder_path = Path(__file__).resolve().parent.absolute()
 
+if not os.path.isdir(folder_path / simulation_output_dir):
+    os.mkdir(folder_path / simulation_output_dir)
+
 simulation_file = folder_path / simulation_name
-trip_info_file = folder_path / 'simulation-output-files' / 'tripinfo.xml'
-statistics_file = folder_path / 'simulation-output-files' / 'statistics_output.xml'
+trip_info_file = folder_path / simulation_output_dir / 'tripinfo.xml'
+statistics_file = folder_path / simulation_output_dir / 'statistics_output.xml'
 custom_gui_view_file = folder_path.parent / 'custom_sumo_gui_view.xml'
 
 if 'SUMO_HOME' in os.environ:
