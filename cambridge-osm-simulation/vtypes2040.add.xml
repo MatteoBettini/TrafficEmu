@@ -1,0 +1,5 @@
+<routes>
+   <vType id="pedestrian" length=".215" width=".478" height="1.719" minGap=".5" accel="1.5" decel="2" maxSpeed="1.5" emissionClass="PHEMlight/zero" guiShape="pedestrian"/>
+   <vType id="bicycle" length="1.6" width=".65" height="1.7" minGap=".5" accel="1.2" decel="4.5" maxSpeed="5.55" emissionClass="PHEMlight/zero" guiShape="bicycle"/>
+   <vType id="veh_passenger" emissionClass="PHEMlight/LNF_G_EU0_II" probability="2.31208290125e-59" width="1.9" length="4.7" maxSpeed="50" guiShape="delivery" minGap="2.5" accel="2.9" decel="4.5" height="1.73"/>
+</routes>
