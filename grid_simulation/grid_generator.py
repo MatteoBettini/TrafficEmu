@@ -79,7 +79,6 @@ class GridGenerator:
         assert edgeMaxSpeed > 0, 'The maximum speed on the roads should be greater than 0'
         assert edgePriority >= 0, 'Priority cannot be negative'
 
-
         GridGenerator.__junctionType = JunctionType(junctionType).name
         GridGenerator.__tlType = TrafficLightType(tlType).name
         GridGenerator.__tlLayout = TrafficLightLayout(tlLayout).name
@@ -90,10 +89,10 @@ class GridGenerator:
         GridGenerator.__edgeMaxSpeed = edgeMaxSpeed
         GridGenerator.__edgePriority = edgePriority
 
-        f_nodes, f_edges = GridGenerator.__generate_grid_xml(gridSize)
+        f_nodes, f_edges, outer_nodes = GridGenerator.__generate_grid_xml(gridSize)
         GridGenerator.generate_net_from_xml()
 
-        return f_nodes, f_edges
+        return f_nodes, f_edges, outer_nodes
 
     @staticmethod
     def generate_net_from_xml():
@@ -113,7 +112,7 @@ class GridGenerator:
         if size <= 0:
             return None
 
-        nodes_file = GridGenerator.__generate_nodes_file(size)
+        nodes_file, outer_nodes = GridGenerator.__generate_nodes_file(size)
         edges_file = GridGenerator.__generate_edges_file(size)
 
         f_nodes = open(GridGenerator.nodes_file_path, "w")
@@ -124,7 +123,7 @@ class GridGenerator:
         f_edges.write(edges_file)
         f_edges.close()
 
-        return f_nodes, f_edges
+        return f_nodes, f_edges, outer_nodes
 
     @staticmethod
     def __generate_nodes_file(size: int):
@@ -144,15 +143,22 @@ class GridGenerator:
         node.setAttribute('tlLayout', GridGenerator.__tlLayout)
         node.setAttribute('keepClear', str(GridGenerator.__keepClear).lower())
 
-
         root.appendChild(node)
+
+        outer_nodes = [1]
 
         if size > 1:
             for i in range(size-1):
                 doc = GridGenerator.__increase_grid_size(doc)
 
+            for i in range(2, size):
+                outer_nodes.append((i-1)**2 + 1) # bottom row
+                outer_nodes.append(i**2) # left row
+            for i in range((size-1)**2 + 1, size**2+1):
+                outer_nodes.append(i) # top and right row
+
         xml_str = doc.toprettyxml(indent="\t")
-        return xml_str
+        return xml_str, outer_nodes
 
     @staticmethod
     def __increase_grid_size(doc: Document):

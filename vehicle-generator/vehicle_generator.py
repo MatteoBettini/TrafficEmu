@@ -1,5 +1,5 @@
 from xml.dom import minidom
-from xml.dom.minidom import Document
+from xml.dom.minidom import Document, Element
 
 from pathlib import Path
 
@@ -52,14 +52,14 @@ class VehicleGenerator():
     output_file_path = folder_path / "veh.rou.xml" 
 
     @staticmethod
-    def generate_routes_file(size: int):
-        routes_file = VehicleGenerator.__generate_routes_file(size)
+    def generate_routes_file():
+        routes_file = VehicleGenerator.__generate_routes_file()
         f_routes = open(VehicleGenerator.output_file_path, "w")
         f_routes.write(routes_file)
         f_routes.close()
 
     @staticmethod
-    def __generate_routes_file(size: int):
+    def __generate_routes_file():
         doc = minidom.Document()
 
         root = doc.createElement('routes')
@@ -67,23 +67,27 @@ class VehicleGenerator():
         root.setAttribute('xsi:noNamespaceSchemaLocation', 'http://sumo.dlr.de/xsd/routes_file.xsd')
         doc.appendChild(root)
 
-        vType_passenger = Vehicle(
+        passenger_vehicle = Vehicle(
             id="veh_passenger",
             vehicle_class=VehicleClasses.PASSENGER,
             emission_class=EmmissionClasses.ZERO
             )
-        vType_passenger_element = doc.createElement('vType')
-        vType_passenger_element.setAttribute('id', vType_passenger.id)
-        vType_passenger_element.setAttribute('vClass', vType_passenger.vehicle_class)
-        vType_passenger_element.setAttribute('emissionClass', vType_passenger.emission_class)
-        vType_passenger_element.setAttribute('accel', str(vType_passenger.accel))
-        vType_passenger_element.setAttribute('decel', str(vType_passenger.decel))
-        vType_passenger_element.setAttribute('maxSpeed', str(vType_passenger.max_speed))
-        vType_passenger_element.setAttribute('speedFactor', str(vType_passenger.speed_factor))
-        root.appendChild(vType_passenger_element)
+        root.appendChild(VehicleGenerator.__generate_vehicle_element(doc, passenger_vehicle))
 
         xml_str = doc.toprettyxml(indent="\t")
         return xml_str
 
+    
+    @staticmethod
+    def __generate_vehicle_element(doc: Document, vehicle: Vehicle) -> Element:
+        element = doc.createElement('vType')
+        element.setAttribute('id', vehicle.id)
+        element.setAttribute('vClass', vehicle.vehicle_class)
+        element.setAttribute('emissionClass', vehicle.emission_class)
+        element.setAttribute('accel', str(vehicle.accel))
+        element.setAttribute('decel', str(vehicle.decel))
+        element.setAttribute('maxSpeed', str(vehicle.max_speed))
+        element.setAttribute('speedFactor', str(vehicle.speed_factor))
+        return element
 
-VehicleGenerator.generate_routes_file(1)
+VehicleGenerator.generate_routes_file()
