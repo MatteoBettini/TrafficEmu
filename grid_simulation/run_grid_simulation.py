@@ -14,8 +14,6 @@ else:
     sys.exit("please declare environment variable 'SUMO_HOME'")
 
 
-
-
 class Simulator:
 
     simulation_name = 'grid.sumocfg'
