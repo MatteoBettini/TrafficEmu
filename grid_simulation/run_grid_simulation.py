@@ -14,10 +14,22 @@ else:
     sys.exit("please declare environment variable 'SUMO_HOME'")
 
 
-SIMULATION_OUTPUT_DIR = 'simulation-output-files'
 
 
 class Simulator:
+
+    simulation_name = 'grid.sumocfg'
+    simulation_output_dir = 'simulation-output-files'
+
+    folder_path = Path(__file__).resolve().parent.absolute()
+    if not os.path.isdir(folder_path / simulation_output_dir):
+        os.mkdir(folder_path / simulation_output_dir)
+
+    simulation_file = folder_path / simulation_name
+    trip_info_file = folder_path / simulation_output_dir / 'tripinfo.xml'
+    statistics_file = folder_path / simulation_output_dir / 'statistics_output.xml'
+    emissions_file = folder_path / simulation_output_dir / 'emissions_output.xml'
+    custom_gui_view_file = folder_path.parent / 'custom_sumo_gui_view.xml'
 
     def __init__(self, show_gui=False, seed=42, step_delay=0):
         """
@@ -27,22 +39,10 @@ class Simulator:
         self.verbose = 1 if show_gui else 0
         self.seed = seed
         self.step_delay = step_delay
-
         if show_gui:
             self.sumoBinary = checkBinary('sumo-gui')
         else:
             self.sumoBinary = checkBinary('sumo')
-
-        folder_path = Path(__file__).resolve().parent.absolute()
-        if not os.path.isdir(folder_path / SIMULATION_OUTPUT_DIR):
-            os.mkdir(folder_path / SIMULATION_OUTPUT_DIR)
-
-        self.simulation_file = folder_path / 'grid.sumocfg'
-        self.trip_info_file = folder_path / SIMULATION_OUTPUT_DIR / 'tripinfo.xml'
-        self.statistics_file = folder_path / SIMULATION_OUTPUT_DIR / 'statistics_output.xml'
-        self.emissions_file = folder_path / SIMULATION_OUTPUT_DIR / 'emissions_output.xml'
-        self.custom_gui_view_file = folder_path.parent / 'custom_sumo_gui_view.xml'
-
 
     def simulate(self, gridSize: int, junctionType: int = 1, tlType: int = 2, edgeMaxSpeed: float = 13.9, tlLayout: int = 1,
                  keepClearJunction: bool = True, edgeType: int = 1, edgeLength: float = 50, numberOfLanes: int = 1,
@@ -139,7 +139,7 @@ class Simulator:
 if __name__ == '__main__':
     opt_parser = optparse.OptionParser()
     opt_parser.add_option('--showgui', action='store_true',
-                          default=False, help='run the commandline version of sumo')
+                          default=True, help='run the commandline version of sumo')
     options, args = opt_parser.parse_args()
 
     simulator = Simulator(options.showgui, step_delay=30)
