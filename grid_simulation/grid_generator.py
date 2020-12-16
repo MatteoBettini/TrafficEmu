@@ -79,7 +79,6 @@ class GridGenerator:
         assert edgeMaxSpeed > 0, 'The maximum speed on the roads should be greater than 0'
         assert edgePriority >= 0, 'Priority cannot be negative'
 
-
         GridGenerator.__junctionType = JunctionType(junctionType).name
         GridGenerator.__tlType = TrafficLightType(tlType).name
         GridGenerator.__tlLayout = TrafficLightLayout(tlLayout).name
@@ -144,17 +143,18 @@ class GridGenerator:
         node.setAttribute('tlLayout', GridGenerator.__tlLayout)
         node.setAttribute('keepClear', str(GridGenerator.__keepClear).lower())
 
-
         root.appendChild(node)
+
+        outer_nodes = [1]
 
         if size > 1:
             for i in range(size-1):
                 doc = GridGenerator.__increase_grid_size(doc)
-            outer_nodes = [1]
-            for i in range(2, size-1, 1):
+
+            for i in range(2, size):
                 outer_nodes.append((i-1)**2 + 1) # bottom row
                 outer_nodes.append(i**2) # left row
-            for i in range((size-1)**2 + 1, size**2, 1):
+            for i in range((size-1)**2 + 1, size**2+1):
                 outer_nodes.append(i) # top and right row
 
         xml_str = doc.toprettyxml(indent="\t")

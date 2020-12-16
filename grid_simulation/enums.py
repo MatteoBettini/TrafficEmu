@@ -1,5 +1,7 @@
-from enum import Enum
+from enum import Enum, unique
 
+
+@unique
 class JunctionType(Enum):
     priority = 1
     traffic_light = 2
@@ -10,16 +12,19 @@ class JunctionType(Enum):
     priority_stop = 7
     allway_stop = 8
 
+@unique
 class TrafficLightType(Enum):
     static = 1
     actuated = 2
     delay_based = 3
 
+@unique
 class TrafficLightLayout(Enum):
     opposites = 1
     incoming = 2
     alternateOneWay = 3
 
+@unique
 class EdgeType(Enum):
     normal_road = 1
     normal_road_2lanes = 2
