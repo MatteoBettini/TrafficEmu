@@ -13,7 +13,7 @@ from grid_simulation.enums import *
         
     There are several input parameters that are specifiable:
         - gridSize: The size of the grid (the number of junctions on one side)
-                    Discrete variable, Domain [1, +inf]
+                    Discrete variable, Domain [2, +inf]
         - junctionType: How the traffic is regualted in the junctions, explaination of the different types can be found at https://sumo.dlr.de/docs/Networks/PlainXML.html#node_descriptions
                     Discrete variable, Domain can be seen in the enums.py file
         - tlType: An optional type for the traffic light algorithm (see https://sumo.dlr.de/docs/Networks/PlainXML.html#node_descriptions)
@@ -68,6 +68,17 @@ class GridGenerator:
     @staticmethod
     def generate_grid_net(gridSize: int, junctionType: int = 1, tlType: int = 2, tlLayout: int = 1, keepClearJunctions: bool = True,
                           edgeType: int = 1, edgeLength: float = 50, numberOfLanes: int = 1, edgeMaxSpeed: float = 13.9, edgePriority: int = 0):
+
+        assert gridSize > 1, 'gridSize should be greater than 1'
+        assert junctionType in [jt.value for jt in JunctionType], 'Specified junctionType is not supported'
+        assert tlType in [tlt.value for tlt in TrafficLightType], 'Specified tlType is not supported'
+        assert tlLayout in [tll.value for tll in TrafficLightLayout], 'Specified tlLayout is not supported'
+        assert edgeType in [et.value for et in EdgeType], 'Specified edgeType is not supported'
+        assert edgeLength > 0, 'Edge length should be greater then 0'
+        assert numberOfLanes > 0, 'The number of lanes must be at leat 1'
+        assert edgeMaxSpeed > 0, 'The maximum speed on the roads should be greater than 0'
+        assert edgePriority >= 0, 'Priority cannot be negative'
+
 
         GridGenerator.__junctionType = JunctionType(junctionType).name
         GridGenerator.__tlType = TrafficLightType(tlType).name
