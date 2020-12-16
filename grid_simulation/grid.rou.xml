@@ -4,11 +4,11 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
 
     <input>
-        <sumo-net-file value="/Users/Matteo/PycharmProjects/TrafficEmu/grid-simulation/grid.net.xml"/>
+        <sumo-net-file value="/Users/Matteo/PycharmProjects/TrafficEmu/grid_simulation/grid.net.xml"/>
     </input>
 
     <output>
-        <output-file value="/Users/Matteo/PycharmProjects/TrafficEmu/grid-simulation/grid.net.xml"/>
+        <output-file value="/Users/Matteo/PycharmProjects/TrafficEmu/grid_simulation/grid.net.xml"/>
     </output>
 
     <processing>
@@ -30,7 +30,7 @@
     </pedestrian>
 
     <netedit>
-        <route-files value="/Users/Matteo/PycharmProjects/TrafficEmu/grid-simulation/grid.rou.xml"/>
+        <route-files value="/Users/Matteo/PycharmProjects/TrafficEmu/grid_simulation/grid.rou.xml"/>
     </netedit>
 
     <report>

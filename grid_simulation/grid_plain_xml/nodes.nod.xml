@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<nodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/nodes_file.xsd">
+	<node id="n1" x="0" y="0" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n2" x="50" y="0" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n3" x="50" y="50" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n4" x="0" y="50" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n5" x="100" y="0" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n6" x="100" y="50" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n7" x="100" y="100" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n8" x="50" y="100" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n9" x="0" y="100" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n10" x="150" y="0" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n11" x="150" y="50" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n12" x="150" y="100" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n13" x="150" y="150" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n14" x="100" y="150" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n15" x="50" y="150" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n16" x="0" y="150" type="traffic_light" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+</nodes>
