@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+	<vType accel="2.6" decel="4.5" emissionClass="Zero" id="veh_passenger" maxSpeed="55.55" speedFactor="1.0" vClass="passenger"/>
+</routes>
