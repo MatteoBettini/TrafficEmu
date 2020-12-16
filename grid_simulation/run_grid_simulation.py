@@ -4,6 +4,7 @@ import optparse
 from sumolib import checkBinary
 import traci
 from pathlib import Path
+from grid_simulation.grid_generator import GridGenerator
 
 simulation_seed = 42
 simulation_delay = 300
@@ -54,7 +55,8 @@ if __name__ == '__main__':
     else:
         sumoBinary = checkBinary('sumo-gui')
 
-    print()
+    GridGenerator.generate_grid_net(gridSize=4, numberOfLanes=2, junctionType=2, edgeLength=50)
+
     # traci starts sumo as a subprocess and then this script connects and runs
     traci.start([sumoBinary, '--configuration-file', simulation_file,
                  '--start',

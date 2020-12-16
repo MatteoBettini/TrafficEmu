@@ -244,12 +244,3 @@ class GridGenerator:
             root.appendChild(edge_inverse)
 
         return doc
-
-
-
-if __name__ == '__main__':
-
-    grid_size = 4
-
-    GridGenerator.generate_grid_net(grid_size, numberOfLanes=3, junctionType=2, edgeLength=50)
-
