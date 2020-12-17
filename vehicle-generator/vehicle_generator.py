@@ -9,15 +9,15 @@ class Vehicle:
     # https://sumo.dlr.de/docs/Definition_of_Vehicles,_Vehicle_Types,_and_Routes.html#available_vtype_attributes
 
     def __init__(
-        self,
-        id: str,
-        vehicle_class: VehicleClasses,
-        emission_class: EmmissionClasses,
-        accel: float = 2.6,
-        decel: float = 4.5,
-        max_speed: float = 55.55,
-        speed_factor: float = 1.0,
-        ):
+            self,
+            id: str,
+            vehicle_class: VehicleClasses,
+            emission_class: EmmissionClasses,
+            accel: float = 2.6,
+            decel: float = 4.5,
+            max_speed: float = 55.55,
+            speed_factor: float = 1.0,
+    ):
         """[summary]
 
         Args:
@@ -47,9 +47,10 @@ class Vehicle:
         self.max_speed = max_speed
         self.speed_factor = speed_factor
 
-class VehicleGenerator():
+
+class VehicleGenerator:
     folder_path = Path(__file__).resolve().parent.absolute()
-    output_file_path = folder_path / "veh.rou.xml" 
+    output_file_path = folder_path / "veh.rou.xml"
 
     @staticmethod
     def generate_routes_file():
@@ -71,13 +72,12 @@ class VehicleGenerator():
             id="veh_passenger",
             vehicle_class=VehicleClasses.PASSENGER,
             emission_class=EmmissionClasses.ZERO
-            )
+        )
         root.appendChild(VehicleGenerator.__generate_vehicle_element(doc, passenger_vehicle))
 
         xml_str = doc.toprettyxml(indent="\t")
         return xml_str
 
-    
     @staticmethod
     def __generate_vehicle_element(doc: Document, vehicle: Vehicle) -> Element:
         element = doc.createElement('vType')
@@ -89,5 +89,6 @@ class VehicleGenerator():
         element.setAttribute('maxSpeed', str(vehicle.max_speed))
         element.setAttribute('speedFactor', str(vehicle.speed_factor))
         return element
+
 
 VehicleGenerator.generate_routes_file()

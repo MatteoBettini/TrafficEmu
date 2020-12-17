@@ -89,10 +89,10 @@ class GridGenerator:
         GridGenerator.__edgeMaxSpeed = edgeMaxSpeed
         GridGenerator.__edgePriority = edgePriority
 
-        f_nodes, f_edges, outer_nodes = GridGenerator.__generate_grid_xml(gridSize)
+        f_nodes, f_edges = GridGenerator.__generate_grid_xml(gridSize)
         GridGenerator.generate_net_from_xml()
 
-        return f_nodes, f_edges, outer_nodes
+        return f_nodes, f_edges
 
     @staticmethod
     def generate_net_from_xml():
@@ -108,12 +108,12 @@ class GridGenerator:
             print(error.decode())
 
     @staticmethod
-    def __generate_grid_xml(size: int):
+    def __generate_grid_xml(size: int, withOuterNodes: bool = True):
         if size <= 0:
             return None
 
-        nodes_file, outer_nodes = GridGenerator.__generate_nodes_file(size)
-        edges_file = GridGenerator.__generate_edges_file(size)
+        nodes_file = GridGenerator.__generate_nodes_file(size, withOuterNodes)
+        edges_file = GridGenerator.__generate_edges_file(size, withOuterNodes)
 
         f_nodes = open(GridGenerator.nodes_file_path, "w")
         f_nodes.write(nodes_file)
@@ -123,10 +123,10 @@ class GridGenerator:
         f_edges.write(edges_file)
         f_edges.close()
 
-        return f_nodes, f_edges, outer_nodes
+        return f_nodes, f_edges
 
     @staticmethod
-    def __generate_nodes_file(size: int):
+    def __generate_nodes_file(size: int, withOuterNodes: bool = True):
         doc = minidom.Document()
 
         root = doc.createElement('nodes')
@@ -145,20 +145,14 @@ class GridGenerator:
 
         root.appendChild(node)
 
-        outer_nodes = [1]
+        for i in range(size-1):
+            doc = GridGenerator.__increase_grid_size(doc)
 
-        if size > 1:
-            for i in range(size-1):
-                doc = GridGenerator.__increase_grid_size(doc)
-
-            for i in range(2, size):
-                outer_nodes.append((i-1)**2 + 1) # bottom row
-                outer_nodes.append(i**2) # left row
-            for i in range((size-1)**2 + 1, size**2+1):
-                outer_nodes.append(i) # top and right row
+        if withOuterNodes:
+            doc = GridGenerator.__add_outer_nodes(doc)
 
         xml_str = doc.toprettyxml(indent="\t")
-        return xml_str, outer_nodes
+        return xml_str
 
     @staticmethod
     def __increase_grid_size(doc: Document):
@@ -193,7 +187,47 @@ class GridGenerator:
         return doc
 
     @staticmethod
-    def __generate_edges_file(size: int):
+    def __add_outer_nodes(doc: Document):
+
+        root = doc.documentElement
+        nodes_in_file = [childNode for childNode in root.childNodes if childNode.nodeType == 1]
+
+        # number of nodes in the grid
+        num_of_nodes = len(nodes_in_file)
+        grid_size = int(math.sqrt(num_of_nodes))
+        num_of_nodes_to_insert = grid_size * 4
+
+        for i in range(num_of_nodes_to_insert):
+            node = doc.createElement('node')
+            node.setAttribute('id', 'o' + str(i + 1))
+            if i < num_of_nodes_to_insert // 4:
+                x = GridGenerator.__edgeLength * i
+                y = -GridGenerator.__edgeLength
+                print('a')
+            elif i < 2 * (num_of_nodes_to_insert // 4):
+                x = GridGenerator.__edgeLength * grid_size
+                y = GridGenerator.__edgeLength * (i - num_of_nodes_to_insert // 4)
+                print('b')
+            elif i < 3 * (num_of_nodes_to_insert // 4):
+                x = GridGenerator.__edgeLength * (grid_size - 1 - (i - 2 * num_of_nodes_to_insert // 4))
+                y = GridGenerator.__edgeLength * grid_size
+                print('c')
+            else:
+                x = -GridGenerator.__edgeLength
+                y = GridGenerator.__edgeLength * (grid_size - 1 - (i - 3 * num_of_nodes_to_insert // 4))
+                print('d')
+
+            node.setAttribute('x', str(x))
+            node.setAttribute('y', str(y))
+
+            node.setAttribute('type', JunctionType.priority.name)
+
+            root.appendChild(node)
+
+        return doc
+
+    @staticmethod
+    def __generate_edges_file(size: int, withOuterNodes: bool = True):
 
         doc = minidom.Document()
 
@@ -202,9 +236,11 @@ class GridGenerator:
         root.setAttribute('xsi:noNamespaceSchemaLocation', 'http://sumo.dlr.de/xsd/edges_file.xsd')
         doc.appendChild(root)
 
-        if size > 1:
-            for i in range(size - 1):
-                doc = GridGenerator.__add_edges_to_grid(doc, i+2)
+        for i in range(size - 1):
+            doc = GridGenerator.__add_edges_to_grid(doc, i+2)
+
+        if withOuterNodes:
+            doc = GridGenerator.__add_outer_edges(doc, size)
 
         xml_str = doc.toprettyxml(indent="\t")
         return xml_str
@@ -235,7 +271,7 @@ class GridGenerator:
                 end = start + 1
 
             edge = doc.createElement('edge')
-            edge.setAttribute('id', 'e' + str(start) + 'to' + str(end))
+            edge.setAttribute('id', 'n' + str(start) + 'ton' + str(end))
             edge.setAttribute('from', 'n' + str(start))
             edge.setAttribute('to', 'n' + str(end))
 
@@ -245,7 +281,7 @@ class GridGenerator:
             edge.setAttribute('type', GridGenerator.__edgeType)
 
             edge_inverse = doc.createElement('edge')
-            edge_inverse.setAttribute('id', 'e' + str(end) + 'to' + str(start))
+            edge_inverse.setAttribute('id', 'n' + str(end) + 'ton' + str(start))
             edge_inverse.setAttribute('from', 'n' + str(end))
             edge_inverse.setAttribute('to', 'n' + str(start))
 
@@ -257,6 +293,56 @@ class GridGenerator:
             root.appendChild(edge)
             root.appendChild(edge_inverse)
 
+
+            root.appendChild(edge_inverse)
+
+        return doc
+
+    @staticmethod
+    def __add_outer_edges(doc: Document, size: int):
+
+        root = doc.documentElement
+
+        grid_size = size
+        num_of_edges_to_insert = 4 * grid_size
+
+        for i in range(num_of_edges_to_insert):
+
+            if i < num_of_edges_to_insert // 4:
+                start = i ** 2 + 1
+                end = i + 1
+            elif i < num_of_edges_to_insert // 2:
+                start = ((grid_size - 1) ** 2) + i + 1 - num_of_edges_to_insert // 4
+                end = i + 1
+            elif i < 3 * num_of_edges_to_insert // 4:
+                start = ((grid_size - 1) ** 2) + i - num_of_edges_to_insert // 4
+                end = i + 1
+            else:
+                start = (grid_size - (i - 3 * num_of_edges_to_insert // 4)) ** 2
+                end = i + 1
+
+            edge = doc.createElement('edge')
+            edge.setAttribute('id', 'n' + str(start) + 'too' + str(end))
+            edge.setAttribute('from', 'n' + str(start))
+            edge.setAttribute('to', 'o' + str(end))
+
+            edge.setAttribute('numLanes', str(GridGenerator.__numberOfLanes))
+            edge.setAttribute('speed', str(GridGenerator.__edgeMaxSpeed))
+            edge.setAttribute('priority', str(GridGenerator.__edgePriority))
+            edge.setAttribute('type', GridGenerator.__edgeType)
+
+            edge_inverse = doc.createElement('edge')
+            edge_inverse.setAttribute('id', 'o' + str(end) + 'ton' + str(start))
+            edge_inverse.setAttribute('from', 'o' + str(end))
+            edge_inverse.setAttribute('to', 'n' + str(start))
+
+            edge_inverse.setAttribute('numLanes', str(GridGenerator.__numberOfLanes))
+            edge_inverse.setAttribute('speed', str(GridGenerator.__edgeMaxSpeed))
+            edge_inverse.setAttribute('priority', str(GridGenerator.__edgePriority))
+            edge_inverse.setAttribute('type', GridGenerator.__edgeType)
+
+            root.appendChild(edge)
+            root.appendChild(edge_inverse)
 
             root.appendChild(edge_inverse)
 

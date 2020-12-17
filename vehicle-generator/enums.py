@@ -2,7 +2,7 @@ from enum import Enum, unique
 
 @unique
 class VehicleClasses(Enum):
-    #https://sumo.dlr.de/docs/Definition_of_Vehicles,_Vehicle_Types,_and_Routes.html#abstract_vehicle_class
+    # https://sumo.dlr.de/docs/Definition_of_Vehicles,_Vehicle_Types,_and_Routes.html#abstract_vehicle_class
     PASSENGER = "passenger"
     PEDESTRIAN = "pedestrian"
     EMERGENCY = "emergency"
