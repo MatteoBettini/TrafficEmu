@@ -65,10 +65,7 @@ class VehicleGenerator:
         doc = minidom.Document()
 
         root = doc.createElement('additional')
-        root.setAttribute(
-            'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
-        root.setAttribute('xsi:noNamespaceSchemaLocation',
-                          'http://https://sumo.dlr.de/xsd/sumoConfiguration.xsd')
+
         doc.appendChild(root)
 
         for vehicle in vehicles:
