@@ -5,6 +5,7 @@ from pathlib import Path
 
 from enums import VehicleClasses, EmmissionClasses
 
+
 class Vehicle:
     # https://sumo.dlr.de/docs/Definition_of_Vehicles,_Vehicle_Types,_and_Routes.html#available_vtype_attributes
 
@@ -37,11 +38,13 @@ class Vehicle:
         self.decel = decel
 
         if not isinstance(vehicle_class, VehicleClasses):
-            raise TypeError('vehicle_class must be an instance of VehicleClasses Enum')
+            raise TypeError(
+                'vehicle_class must be an instance of VehicleClasses Enum')
         self.vehicle_class = vehicle_class.value
 
         if not isinstance(emission_class, EmmissionClasses):
-            raise TypeError('emission_class must be an instance of EmmissionClasses Enum')
+            raise TypeError(
+                'emission_class must be an instance of EmmissionClasses Enum')
         self.emission_class = emission_class.value
 
         self.max_speed = max_speed
@@ -49,31 +52,28 @@ class Vehicle:
 
 
 class VehicleGenerator:
-    folder_path = Path(__file__).resolve().parent.absolute()
-    output_file_path = folder_path / "veh.rou.xml"
 
     @staticmethod
-    def generate_routes_file():
-        routes_file = VehicleGenerator.__generate_routes_file()
-        f_routes = open(VehicleGenerator.output_file_path, "w")
-        f_routes.write(routes_file)
-        f_routes.close()
+    def generate_additional_file(output_file_path: Path, vehicles: list = []):
+        additional_file = VehicleGenerator.__generate_additional_file(vehicles)
+        f_add = open(output_file_path, "w")
+        f_add.write(additional_file)
+        f_add.close()
 
     @staticmethod
-    def __generate_routes_file():
+    def __generate_additional_file(vehicles: list = []):
         doc = minidom.Document()
 
-        root = doc.createElement('routes')
-        root.setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
-        root.setAttribute('xsi:noNamespaceSchemaLocation', 'http://sumo.dlr.de/xsd/routes_file.xsd')
+        root = doc.createElement('additional')
+        root.setAttribute(
+            'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+        root.setAttribute('xsi:noNamespaceSchemaLocation',
+                          'http://https://sumo.dlr.de/xsd/sumoConfiguration.xsd')
         doc.appendChild(root)
 
-        passenger_vehicle = Vehicle(
-            id="veh_passenger",
-            vehicle_class=VehicleClasses.PASSENGER,
-            emission_class=EmmissionClasses.ZERO
-        )
-        root.appendChild(VehicleGenerator.__generate_vehicle_element(doc, passenger_vehicle))
+        for vehicle in vehicles:
+            root.appendChild(
+                VehicleGenerator.__generate_vehicle_element(doc, vehicle))
 
         xml_str = doc.toprettyxml(indent="\t")
         return xml_str
@@ -90,5 +90,23 @@ class VehicleGenerator:
         element.setAttribute('speedFactor', str(vehicle.speed_factor))
         return element
 
+if __name__ == "__main__":
+    folder_path = Path(__file__).resolve().parent.absolute()
+    output_file_path = folder_path / "veh.add.xml"
 
-VehicleGenerator.generate_routes_file()
+    vehicles = []
+    vehicles.append(
+        Vehicle(
+            id="veh_passenger",
+            vehicle_class=VehicleClasses.PASSENGER,
+            emission_class=EmmissionClasses.PC_G_EU4
+        )
+    )
+    vehicles.append(
+        Vehicle(
+            id="veh_emergency",
+            vehicle_class=VehicleClasses.EMERGENCY,
+            emission_class=EmmissionClasses.PC_G_EU4
+        )
+    )
+    VehicleGenerator.generate_additional_file(output_file_path, vehicles)
