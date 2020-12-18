@@ -6,6 +6,7 @@ from sumolib.output import parse as parse_sumo_output
 import traci
 from pathlib import Path
 from grid_simulation.grid_generator import GridGenerator
+from random_trip_generator import RandomTripGenerator
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -29,6 +30,14 @@ class Simulator:
     emissions_file = folder_path / simulation_output_dir / 'emissions_output.xml'
     custom_gui_view_file = folder_path.parent / 'custom_sumo_gui_view.xml'
 
+    vehicle_id = 'veh_passenger'
+    vehicle_class = 'passenger'
+    net_file = folder_path / 'grid.net.xml'
+    trip_file = folder_path / (vehicle_id + '.trips.xml')  # --output-trip-file
+    route_file = folder_path / (vehicle_id + '.rou.xml')  # --route-file
+    additional_file = folder_path.parent.absolute() / 'vehicle_generator' / 'veh.add.xml'
+
+
     def __init__(self, show_gui=False, seed=42, step_delay=0):
         """
         :param show_gui: show gui with simulation? requires `sumo-gui` installed
@@ -42,9 +51,25 @@ class Simulator:
         else:
             self.sumoBinary = checkBinary('sumo')
 
-    def simulate(self, gridSize: int, junctionType: int = 1, tlType: int = 2, edgeMaxSpeed: float = 13.9, tlLayout: int = 1,
-                 keepClearJunction: bool = True, edgeType: int = 1, edgeLength: float = 50, numberOfLanes: int = 1,
-                 edgePriority: int = 0):
+    def simulate(
+            self,
+            gridSize: int,         # grid generation params
+            junctionType: int = 1,
+            tlType: int = 2,
+            edgeMaxSpeed: float = 13.9,
+            tlLayout: int = 1,
+            keepClearJunction: bool = True,
+            edgeType: int = 1,
+            edgeLength: float = 50,
+            numberOfLanes: int = 1,
+            edgePriority: int = 0,
+            begin_time: float = 0,  # trip generation params
+            end_time: float = 3600,
+            period: float = 10,
+            binomial: int = 1,
+            fringe_factor: float = 10,
+            use_binomial: bool = True
+    ):
         """
         The user function that feeds into emukit.
 
@@ -72,20 +97,48 @@ class Simulator:
         :return: dictionary containing relevant outputs such as trip time, and total carbon emissions
         """
 
-        GridGenerator.generate_grid_net(gridSize, junctionType, tlType, tlLayout, keepClearJunction, edgeType,
-                                        edgeLength, numberOfLanes, edgeMaxSpeed, edgePriority)
+        # generate the sumo network
+        GridGenerator.generate_grid_net(
+            gridSize, junctionType,
+            tlType, tlLayout,
+            keepClearJunction,
+            edgeType, edgeLength,
+            numberOfLanes, edgeMaxSpeed,
+            edgePriority
+        )
+
+        # generate trips in generated network
+        RandomTripGenerator.generate_random_trips(
+            net_file=Simulator.net_file,
+            trip_file=Simulator.trip_file,
+            route_file=Simulator.route_file,
+            additional_file=Simulator.additional_file,
+            vehicle_id=Simulator.vehicle_id,
+            vehicle_class=Simulator.vehicle_class,
+            begin_time=begin_time,
+            end_time=end_time,
+            period=period,
+            binomial=binomial,
+            fringe_factor=fringe_factor,
+            use_binomial=use_binomial,
+            seed=self.seed,
+        )
 
         # traci starts sumo as a subprocess and then this script connects and runs
-        traci.start([self.sumoBinary,
-                     '--configuration-file', self.simulation_file,
-                     '--start',
-                     '--seed', str(self.seed),
-                     '--delay', str(self.step_delay),
-                     '--gui-settings-file', self.custom_gui_view_file,
-                     '--quit-on-end',
-                     '--tripinfo-output', self.trip_info_file,
-                     '--statistics-output', self.statistics_file,
-                     '--emission-output', self.emissions_file])
+        traci.start([
+            self.sumoBinary,
+            # '--configuration-file', Simulator.simulation_file,
+            '--net-file', self.net_file,
+            '--route-files', self.route_file,
+            '--start',
+            '--seed', str(self.seed),
+            '--delay', str(self.step_delay),
+            '--gui-settings-file', self.custom_gui_view_file,
+            '--quit-on-end',
+            '--tripinfo-output', self.trip_info_file,
+            '--statistics-output', self.statistics_file,
+            '--emission-output', self.emissions_file
+        ])
 
         self.run()
 
@@ -96,7 +149,8 @@ class Simulator:
 
 
     def parse_emissions_output(self):
-        out = {'CO': 0, 'CO2': 0, 'HC':0, 'NOx': 0, 'PMx': 0, 'fuel': 0, 'noise': 0, 'num_emissions_samples': 0}
+        out = {'CO': 0, 'CO2': 0, 'HC':0, 'NOx': 0, 'PMx': 0,
+               'fuel': 0, 'noise': 0, 'num_emissions_samples': 0}
         emissions_output = parse_sumo_output(self.emissions_file, ['vehicle'])
         for sample in emissions_output:
             out['CO'] += float(sample.CO)
@@ -111,8 +165,11 @@ class Simulator:
         return out
 
     def parse_statistics_output(self):
-        statistics_output = parse_sumo_output(self.statistics_file, ['vehicleTripStatistics'])
-        stat = next(statistics_output)  # only one sample as it's aggregate data
+        statistics_output = parse_sumo_output(
+            self.statistics_file,
+            ['vehicleTripStatistics']
+        )
+        stat = next(statistics_output)  # only one sample
         out = {'departDelay': float(stat.departDelay),
                'departDelayWaiting': float(stat.departDelayWaiting),
                'duration': float(stat.duration),
