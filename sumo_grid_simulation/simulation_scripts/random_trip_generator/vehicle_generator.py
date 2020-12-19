@@ -3,7 +3,8 @@ from xml.dom.minidom import Document, Element
 
 from pathlib import Path
 
-from enums import VehicleClasses, EmmissionClasses
+from sumo_grid_simulation.simulation_scripts.enums import VehicleClasses, EmmissionClasses
+from sumo_grid_simulation.simulation_scripts.utils import PathUtils
 
 
 class Vehicle:
@@ -12,8 +13,8 @@ class Vehicle:
     def __init__(
             self,
             id: str,
-            vehicle_class: VehicleClasses,
-            emission_class: EmmissionClasses,
+            vehicle_class: int,
+            emission_class: int,
             accel: float = 2.6,
             decel: float = 4.5,
             max_speed: float = 55.55,
@@ -37,15 +38,15 @@ class Vehicle:
         self.accel = accel
         self.decel = decel
 
-        if not isinstance(vehicle_class, VehicleClasses):
+        if VehicleClasses.get_by_number(vehicle_class) is None:
             raise TypeError(
                 'vehicle_class must be an instance of VehicleClasses Enum')
-        self.vehicle_class = vehicle_class.value
+        self.vehicle_class = VehicleClasses.get_by_number(vehicle_class)
 
-        if not isinstance(emission_class, EmmissionClasses):
+        if EmmissionClasses.get_by_number(emission_class) is None:
             raise TypeError(
                 'emission_class must be an instance of EmmissionClasses Enum')
-        self.emission_class = emission_class.value
+        self.emission_class = EmmissionClasses.get_by_number(emission_class)
 
         self.max_speed = max_speed
         self.speed_factor = speed_factor
@@ -54,9 +55,9 @@ class Vehicle:
 class VehicleGenerator:
 
     @staticmethod
-    def generate_additional_file(output_file_path: Path, vehicles: list = []):
+    def generate_additional_file(vehicles: list = []):
         additional_file = VehicleGenerator.__generate_additional_file(vehicles)
-        f_add = open(output_file_path, "w")
+        f_add = open(PathUtils.additional_file, "w")
         f_add.write(additional_file)
         f_add.close()
 
@@ -79,31 +80,10 @@ class VehicleGenerator:
     def __generate_vehicle_element(doc: Document, vehicle: Vehicle) -> Element:
         element = doc.createElement('vType')
         element.setAttribute('id', vehicle.id)
-        element.setAttribute('vClass', vehicle.vehicle_class)
-        element.setAttribute('emissionClass', vehicle.emission_class)
+        element.setAttribute('vClass', vehicle.vehicle_class.tag)
+        element.setAttribute('emissionClass', vehicle.emission_class.tag)
         element.setAttribute('accel', str(vehicle.accel))
         element.setAttribute('decel', str(vehicle.decel))
         element.setAttribute('maxSpeed', str(vehicle.max_speed))
         element.setAttribute('speedFactor', str(vehicle.speed_factor))
         return element
-
-if __name__ == "__main__":
-    folder_path = Path(__file__).resolve().parent.absolute()
-    output_file_path = folder_path / "veh.add.xml"
-
-    vehicles = []
-    vehicles.append(
-        Vehicle(
-            id="veh_passenger",
-            vehicle_class=VehicleClasses.PASSENGER,
-            emission_class=EmmissionClasses.PC_G_EU4
-        )
-    )
-    vehicles.append(
-        Vehicle(
-            id="veh_emergency",
-            vehicle_class=VehicleClasses.EMERGENCY,
-            emission_class=EmmissionClasses.PC_G_EU4
-        )
-    )
-    VehicleGenerator.generate_additional_file(output_file_path, vehicles)

@@ -1,6 +1,6 @@
 /.idea/
 .DS_Store
-/grid_simulation/simulation-output-files/
+/sumo_grid_simulation/simulation_output_files/
 /cambridge-osm-simulation/simulation-output-files/
 
 

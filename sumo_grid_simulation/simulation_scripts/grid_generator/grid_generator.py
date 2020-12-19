@@ -1,9 +1,9 @@
 from xml.dom import minidom
-from pathlib import Path
 import math
 from xml.dom.minidom import Document
 import subprocess
-from grid_simulation.enums import *
+from sumo_grid_simulation.simulation_scripts.enums import *
+from sumo_grid_simulation.simulation_scripts.utils import PathUtils
 
 """
     This class generates grid networks for sumo
@@ -41,49 +41,41 @@ from grid_simulation.enums import *
 """
 class GridGenerator:
 
-    __junctionType = JunctionType(1).name
-    __tlType = TrafficLightType(2).name
-    __tlLayout = TrafficLightLayout(1).name
+    __junctionType = JunctionType.PRIORITY.tag
+    __tlType = TrafficLightType.ACTUATED.tag
+    __tlLayout = TrafficLightLayout.OPPOSITES.tag
     __keepClear = True
-    __edgeType = EdgeType(1).name
+    __edgeType = EdgeType.NORMAL_ROAD.tag
     __edgeLength = 50
     __numberOfLanes = 1
     __edgeMaxSpeed = 13.9
     __edgePriority = 0
 
-    folder_path = Path(__file__).resolve().parent.absolute()
-    xml_folder = Path('grid_plain_xml')
-
-    nodes_file_path = folder_path / xml_folder / 'nodes.nod.xml'
-    edges_file_path = folder_path / xml_folder / 'edges.edg.xml'
-    type_file_path = folder_path / xml_folder / 'edge_types.typ.xml'
-    output_file_path = folder_path / 'grid.net.xml'
-
     netconvert_command = ['netconvert',
-                          '--node-files=' + str(nodes_file_path),
-                          '--edge-files=' + str(edges_file_path),
-                          '--type-files=' + str(type_file_path),
-                          '--output-file=' + str(output_file_path)]
+                          '--node-files=' + str(PathUtils.nodes_file),
+                          '--edge-files=' + str(PathUtils.edges_file),
+                          '--type-files=' + str(PathUtils.edge_types_file),
+                          '--output-file=' + str(PathUtils.grid_net_file)]
 
     @staticmethod
     def generate_grid_net(gridSize: int, junctionType: int = 1, tlType: int = 2, tlLayout: int = 1, keepClearJunctions: bool = True,
                           edgeType: int = 1, edgeLength: float = 50, numberOfLanes: int = 1, edgeMaxSpeed: float = 13.9, edgePriority: int = 0):
 
         assert gridSize > 1, 'gridSize should be greater than 1'
-        assert junctionType in [jt.value for jt in JunctionType], 'Specified junctionType is not supported'
-        assert tlType in [tlt.value for tlt in TrafficLightType], 'Specified tlType is not supported'
-        assert tlLayout in [tll.value for tll in TrafficLightLayout], 'Specified tlLayout is not supported'
-        assert edgeType in [et.value for et in EdgeType], 'Specified edgeType is not supported'
+        assert JunctionType.get_by_number(junctionType) is not None, 'Specified junctionType is not supported'
+        assert TrafficLightType.get_by_number(tlType) is not None, 'Specified tlType is not supported'
+        assert TrafficLightLayout.get_by_number(tlLayout) is not None, 'Specified tlLayout is not supported'
+        assert EdgeType.get_by_number(edgeType) is not None, 'Specified edgeType is not supported'
         assert edgeLength > 0, 'Edge length should be greater then 0'
         assert numberOfLanes > 0, 'The number of lanes must be at leat 1'
         assert edgeMaxSpeed > 0, 'The maximum speed on the roads should be greater than 0'
         assert edgePriority >= 0, 'Priority cannot be negative'
 
-        GridGenerator.__junctionType = JunctionType(junctionType).name
-        GridGenerator.__tlType = TrafficLightType(tlType).name
-        GridGenerator.__tlLayout = TrafficLightLayout(tlLayout).name
+        GridGenerator.__junctionType = JunctionType.get_by_number(junctionType).tag
+        GridGenerator.__tlType = TrafficLightType.get_by_number(tlType).tag
+        GridGenerator.__tlLayout = TrafficLightLayout.get_by_number(tlLayout).tag
         GridGenerator.__keepClear = keepClearJunctions
-        GridGenerator.__edgeType = EdgeType(edgeType).name
+        GridGenerator.__edgeType = EdgeType.get_by_number(edgeType).tag
         GridGenerator.__edgeLength = edgeLength
         GridGenerator.__numberOfLanes = numberOfLanes
         GridGenerator.__edgeMaxSpeed = edgeMaxSpeed
@@ -115,11 +107,11 @@ class GridGenerator:
         nodes_file = GridGenerator.__generate_nodes_file(size, withOuterNodes)
         edges_file = GridGenerator.__generate_edges_file(size, withOuterNodes)
 
-        f_nodes = open(GridGenerator.nodes_file_path, "w")
+        f_nodes = open(PathUtils.nodes_file, "w")
         f_nodes.write(nodes_file)
         f_nodes.close()
 
-        f_edges = open(GridGenerator.edges_file_path, "w")
+        f_edges = open(PathUtils.edges_file, "w")
         f_edges.write(edges_file)
         f_edges.close()
 
@@ -203,24 +195,20 @@ class GridGenerator:
             if i < num_of_nodes_to_insert // 4:
                 x = GridGenerator.__edgeLength * i
                 y = -GridGenerator.__edgeLength
-                print('a')
             elif i < 2 * (num_of_nodes_to_insert // 4):
                 x = GridGenerator.__edgeLength * grid_size
                 y = GridGenerator.__edgeLength * (i - num_of_nodes_to_insert // 4)
-                print('b')
             elif i < 3 * (num_of_nodes_to_insert // 4):
                 x = GridGenerator.__edgeLength * (grid_size - 1 - (i - 2 * num_of_nodes_to_insert // 4))
                 y = GridGenerator.__edgeLength * grid_size
-                print('c')
             else:
                 x = -GridGenerator.__edgeLength
                 y = GridGenerator.__edgeLength * (grid_size - 1 - (i - 3 * num_of_nodes_to_insert // 4))
-                print('d')
 
             node.setAttribute('x', str(x))
             node.setAttribute('y', str(y))
 
-            node.setAttribute('type', JunctionType.priority.name)
+            node.setAttribute('type', JunctionType.PRIORITY.tag)
 
             root.appendChild(node)
 
