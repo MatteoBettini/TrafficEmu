@@ -1,12 +1,14 @@
 from enum import Enum, unique
 
-
-@unique
-class JunctionType(Enum):
+class AbstractEnum(Enum):
 
     def __init__(self, number: int, tag: str):
+        super().__init__()
         self.number = number
         self.tag = tag
+
+@unique
+class JunctionType(AbstractEnum):
 
     @staticmethod
     def get_by_number(number: int):
@@ -25,11 +27,7 @@ class JunctionType(Enum):
     ALLWAY_STOP = 8, 'allway_stop'
 
 @unique
-class TrafficLightType(Enum):
-
-    def __init__(self, number: int, tag: str):
-        self.number = number
-        self.tag = tag
+class TrafficLightType(AbstractEnum):
 
     @staticmethod
     def get_by_number(number: int):
@@ -43,11 +41,7 @@ class TrafficLightType(Enum):
     DELAY_BASED = 3, 'delay_based'
 
 @unique
-class TrafficLightLayout(Enum):
-
-    def __init__(self, number: int, tag: str):
-        self.number = number
-        self.tag = tag
+class TrafficLightLayout(AbstractEnum):
 
     @staticmethod
     def get_by_number(number: int):
@@ -61,11 +55,7 @@ class TrafficLightLayout(Enum):
     ALTERNATE_ONE_WAY = 3, 'alternateOneWay'
 
 @unique
-class EdgeType(Enum):
-
-    def __init__(self, number: int, tag: str):
-        self.number = number
-        self.tag = tag
+class EdgeType(AbstractEnum):
 
     @staticmethod
     def get_by_number(number: int):
@@ -81,11 +71,7 @@ class EdgeType(Enum):
     # Possibly we can add as many types as we like to the edge_types file
 
 @unique
-class VehicleClasses(Enum):
-
-    def __init__(self, number: int, tag: str):
-        self.number = number
-        self.tag = tag
+class VehicleClasses(AbstractEnum):
 
     @staticmethod
     def get_by_number(number: int):
@@ -103,11 +89,7 @@ class VehicleClasses(Enum):
     TRUCK = 6, 'truck'
 
 @unique
-class EmmissionClasses(Enum):
-
-    def __init__(self, number: int, tag: str):
-        self.number = number
-        self.tag = tag
+class EmmissionClasses(AbstractEnum):
 
     @staticmethod
     def get_by_number(number: int):
