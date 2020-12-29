@@ -64,10 +64,12 @@ class Simulator:
             decel: float = 4.5,
             maxSpeed: float = 55.55,
             speedFactor: float = 1.0,
+            speedDev: float = 0.1,
     ):
         """
         The user function that feeds into emukit.
 
+        :param speedDev:
         :param speedFactor:
         :param maxSpeed:
         :param decel:
@@ -116,7 +118,8 @@ class Simulator:
             accel=accel,
             decel=decel,
             max_speed=maxSpeed,
-            speed_factor=speedFactor
+            speed_factor=speedFactor,
+            speed_dev=speedDev
         )])
 
         # generate trips in generated network
