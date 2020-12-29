@@ -19,6 +19,7 @@ class Vehicle:
             decel: float = 4.5,
             max_speed: float = 55.55,
             speed_factor: float = 1.0,
+            speed_dev: float = 0.1
     ):
         """[summary]
 
@@ -30,6 +31,7 @@ class Vehicle:
             decel (float, optional): The deceleration ability of vehicles of this type (in m/s^2). Defaults to 4.5.
             max_speed (float, optional): The vehicle's maximum velocity (in m/s). Defaults to 55.55.
             speed_factor (float, optional): The vehicles expected multiplicator for lane speed limits. Defaults to 1.0.
+            speed_dev (float, optional): The deviation of the speedFactor. Defaults to 0.1.
 
         Raises:
             TypeError: [description]
@@ -50,6 +52,7 @@ class Vehicle:
 
         self.max_speed = max_speed
         self.speed_factor = speed_factor
+        self.speed_dev = speed_dev
 
 
 class VehicleGenerator:
@@ -86,4 +89,5 @@ class VehicleGenerator:
         element.setAttribute('decel', str(vehicle.decel))
         element.setAttribute('maxSpeed', str(vehicle.max_speed))
         element.setAttribute('speedFactor', str(vehicle.speed_factor))
+        element.setAttribute('speedDev', str(vehicle.speed_dev))
         return element
