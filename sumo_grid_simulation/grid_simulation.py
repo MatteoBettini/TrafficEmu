@@ -3,11 +3,11 @@ from sumolib import checkBinary
 from sumolib.output import parse as parse_sumo_output
 import traci
 
-from sumo_grid_simulation.simulation_scripts.utils import *
+from simulation_scripts.utils import *
 
-from sumo_grid_simulation.simulation_scripts.grid_generator.grid_generator import GridGenerator
-from sumo_grid_simulation.simulation_scripts.random_trip_generator.vehicle_generator import VehicleGenerator, Vehicle
-from sumo_grid_simulation.simulation_scripts.random_trip_generator.random_trip_generator import RandomTripGenerator
+from simulation_scripts.grid_generator.grid_generator import GridGenerator
+from simulation_scripts.random_trip_generator.vehicle_generator import VehicleGenerator, Vehicle
+from simulation_scripts.random_trip_generator.random_trip_generator import RandomTripGenerator
 
 checkSumoHome()
 
