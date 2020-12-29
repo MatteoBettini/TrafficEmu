@@ -18,6 +18,7 @@ class RandomTripGenerator:
         fringe_factor: float = 10,
         use_binomial: bool = True,
         seed: int = None,
+        verbosity_level: int = 0
     ):
         """Creates random trips for a single type of vehicle.
 
@@ -56,8 +57,7 @@ class RandomTripGenerator:
                           '--additional-files', str(PathUtils.additional_file),
                           '--trip-attributes', 'type=\"' + str(vehicle_id) + '\"',
                           '--edge-permission', str(vehicle_class.tag),
-                          '--period', str(float(period)),
-                          #   '--verbose'
+                          '--period', str(float(period))
                           ]
 
         if seed is not None:
@@ -67,6 +67,10 @@ class RandomTripGenerator:
         if use_binomial is True:
             python_command.append('--binomial')
             python_command.append(str(int(binomial)))
+
+        if verbosity_level > 0:
+            python_command.append('--verbose')
+            print(' '.join(python_command))
 
         process = subprocess.Popen(python_command,
                                    stdout=subprocess.PIPE,

@@ -110,17 +110,19 @@ class Simulator:
             edgePriority
         )
 
-
-        VehicleGenerator.generate_additional_file([Vehicle(
-            id=Simulator.vehicle_id,
-            vehicle_class=vehicleClass,
-            emission_class=emissionClass,
-            accel=accel,
-            decel=decel,
-            max_speed=maxSpeed,
-            speed_factor=speedFactor,
-            speed_dev=speedDev
-        )])
+        vehicle_list = [
+            Vehicle(
+                id=Simulator.vehicle_id,
+                vehicle_class=vehicleClass,
+                emission_class=emissionClass,
+                accel=accel,
+                decel=decel,
+                max_speed=maxSpeed,
+                speed_factor=speedFactor,
+                speed_dev=speedDev
+            )
+        ]
+        VehicleGenerator.generate_additional_file(vehicle_list, verbosity_level=0)
 
         # generate trips in generated network
         RandomTripGenerator.generate_random_trips(
@@ -133,6 +135,7 @@ class Simulator:
             binomial=self.trips_generator_binomial,
             fringe_factor=self.trips_generator_fringe_factor,
             use_binomial=self.trips_generator_use_binomial,
+            verbosity_level=0
         )
 
         # traci starts sumo as a subprocess and then this script connects and runs

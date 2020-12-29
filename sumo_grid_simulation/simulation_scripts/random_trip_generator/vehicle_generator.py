@@ -53,19 +53,28 @@ class Vehicle:
         self.max_speed = max_speed
         self.speed_factor = speed_factor
         self.speed_dev = speed_dev
+    
+    def __str__(self):
+        return self.id + '; vType: ' + self.vehicle_class.tag + '; EmmissionClass: ' + self.emission_class.tag + \
+            '; accel: ' + str(self.accel) + '; decel: ' +  str(self.decel) + '; max_speed: ' + str(self.max_speed) + \
+            '; speed_factor: ' + str(self.speed_factor) + '; speed_dev: ' + str(self.speed_dev)
 
 
 class VehicleGenerator:
 
     @staticmethod
-    def generate_additional_file(vehicles: list = []):
-        additional_file = VehicleGenerator.__generate_additional_file(vehicles)
+    def generate_additional_file(vehicles: list = [], verbosity_level: int = 0):
+        if verbosity_level > 0:
+            print("Creating additional file with " + str(len(vehicles)) + " vehicle(s).")
+        additional_file = VehicleGenerator.__generate_additional_file(vehicles, verbosity_level)
         f_add = open(PathUtils.additional_file, "w")
         f_add.write(additional_file)
         f_add.close()
+        if verbosity_level > 0:
+            print("Additional file complete.")
 
     @staticmethod
-    def __generate_additional_file(vehicles: list = []):
+    def __generate_additional_file(vehicles: list = [], verbosity_level: int = 0):
         doc = minidom.Document()
 
         root = doc.createElement('additional')
@@ -73,14 +82,16 @@ class VehicleGenerator:
         doc.appendChild(root)
 
         for vehicle in vehicles:
+            if verbosity_level > 1:
+                print("Adding vehicle " + str(vehicle))
             root.appendChild(
-                VehicleGenerator.__generate_vehicle_element(doc, vehicle))
+                VehicleGenerator.__generate_vehicle_element(doc, vehicle, verbosity_level))
 
         xml_str = doc.toprettyxml(indent="\t")
         return xml_str
 
     @staticmethod
-    def __generate_vehicle_element(doc: Document, vehicle: Vehicle) -> Element:
+    def __generate_vehicle_element(doc: Document, vehicle: Vehicle, verbosity_level: int = 0) -> Element:
         element = doc.createElement('vType')
         element.setAttribute('id', vehicle.id)
         element.setAttribute('vClass', vehicle.vehicle_class.tag)
