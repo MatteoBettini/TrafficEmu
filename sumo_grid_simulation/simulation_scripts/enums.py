@@ -87,6 +87,8 @@ class VehicleClasses(AbstractEnum):
     AUTHORITY = 4, 'authority'
     BICYCLE = 5, 'bicycle'
     TRUCK = 6, 'truck'
+    BUS = 7, 'bus'
+    TAXI = 8, 'taxi'
 
 @unique
 class EmmissionClasses(AbstractEnum):
@@ -102,3 +104,6 @@ class EmmissionClasses(AbstractEnum):
     ZERO = 1, "Zero"
     ELECTRIC = 2, "Energy"
     PC_G_EU4 = 3, "HBEFA3/PC_G_EU4"
+    PC_AVERAGE = 4, "HBEFA3/PC" # average passenger car (all fuel types)
+    BUS_AVERAGE = 5, "HBEFA3/Bus" # average urban bus (all fuel types)
+    LDV_AVERAGE = 6, "HBEFA3/LDV" # average light duty vehicles (all fuel types) !! KNOWN TO BE FAULTY WITH NOx
