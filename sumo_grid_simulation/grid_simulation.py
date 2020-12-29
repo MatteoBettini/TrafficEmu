@@ -11,20 +11,19 @@ from sumo_grid_simulation.simulation_scripts.random_trip_generator.random_trip_g
 
 checkSumoHome()
 
+
 class Simulator:
-
-
     vehicle_id = 'veh_passenger'
 
-    def __init__(self, show_gui=False, seed=42, step_delay: int = 0,
+    def __init__(self, show_gui=False, seed=42, step_delay: int = 0, verbosity_level: int = 0,
                  begin_time: float = 0, end_time: float = 3600,
-                 trips_generator_period: float = 10, trips_generator_fringe_factor: float = 10,
+                 trips_generator_period: float = 0.5, trips_generator_fringe_factor: float = 10,
                  trips_generator_binomial: int = 1, trips_generator_use_binomial: bool = True):
         """
         :param show_gui: show gui with simulation? requires `sumo-gui` installed
         :param step_delay: ms between each simulation step (for debugging)
         """
-        self.verbose = 1 if show_gui else 0
+        self.verbosity_level = verbosity_level
         self.seed = seed
         self.step_delay = step_delay
 
@@ -59,7 +58,7 @@ class Simulator:
             edgePriority: int = 0,
             # trip generation params
             vehicleClass: int = 1,  # 1 is passenger
-            emissionClass: int = 3, # 3 is PC_G_EU4
+            emissionClass: int = 3,  # 3 is PC_G_EU4
             accel: float = 2.6,
             decel: float = 4.5,
             maxSpeed: float = 55.55,
@@ -107,7 +106,7 @@ class Simulator:
             keepClearJunction,
             edgeType, edgeLength,
             numberOfLanes, edgeMaxSpeed,
-            edgePriority
+            edgePriority, self.verbosity_level
         )
 
         vehicle_list = [
@@ -122,7 +121,7 @@ class Simulator:
                 speed_dev=speedDev
             )
         ]
-        VehicleGenerator.generate_additional_file(vehicle_list, verbosity_level=0)
+        VehicleGenerator.generate_additional_file(vehicle_list, verbosity_level=self.verbosity_level)
 
         # generate trips in generated network
         RandomTripGenerator.generate_random_trips(
@@ -135,7 +134,7 @@ class Simulator:
             binomial=self.trips_generator_binomial,
             fringe_factor=self.trips_generator_fringe_factor,
             use_binomial=self.trips_generator_use_binomial,
-            verbosity_level=0
+            verbosity_level=self.verbosity_level
         )
 
         # traci starts sumo as a subprocess and then this script connects and runs
@@ -161,10 +160,9 @@ class Simulator:
 
         return {**emissions, **statistics}
 
-
     @staticmethod
     def parse_emissions_output():
-        out = {'CO': 0, 'CO2': 0, 'HC':0, 'NOx': 0, 'PMx': 0,
+        out = {'CO': 0, 'CO2': 0, 'HC': 0, 'NOx': 0, 'PMx': 0,
                'fuel': 0, 'noise': 0, 'num_emissions_samples': 0}
         emissions_output = parse_sumo_output(PathUtils.emissions_file, ['vehicle'])
         for sample in emissions_output:
@@ -201,7 +199,8 @@ class Simulator:
         step = 0
         while traci.simulation.getMinExpectedNumber() > 0:
             traci.simulationStep()
-            if self.verbose: print(step)
+            if self.verbosity_level > 0:
+                print(f'Simulation step N°{step}')
             step += 1
         traci.close()
         sys.stdout.flush()
@@ -214,5 +213,6 @@ if __name__ == '__main__':
     options, args = opt_parser.parse_args()
 
     simulator = Simulator(options.showgui, step_delay=30)
+
     out = simulator.simulate(6)
     print(out)

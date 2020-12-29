@@ -59,7 +59,7 @@ class GridGenerator:
 
     @staticmethod
     def generate_grid_net(gridSize: int, junctionType: int = 1, tlType: int = 2, tlLayout: int = 1, keepClearJunctions: bool = True,
-                          edgeType: int = 1, edgeLength: float = 50, numberOfLanes: int = 1, edgeMaxSpeed: float = 13.9, edgePriority: int = 0):
+                          edgeType: int = 1, edgeLength: float = 50, numberOfLanes: int = 1, edgeMaxSpeed: float = 13.9, edgePriority: int = 0, verbosity_level: int = 0):
 
         assert gridSize > 1, 'gridSize should be greater than 1'
         assert JunctionType.get_by_number(junctionType) is not None, 'Specified junctionType is not supported'
@@ -82,19 +82,26 @@ class GridGenerator:
         GridGenerator.__edgePriority = edgePriority
 
         f_nodes, f_edges = GridGenerator.__generate_grid_xml(gridSize)
-        GridGenerator.generate_net_from_xml()
+        GridGenerator.generate_net_from_xml(verbosity_level)
 
         return f_nodes, f_edges
 
     @staticmethod
-    def generate_net_from_xml():
+    def generate_net_from_xml(verbosity_level: int = 0):
 
-        process = subprocess.Popen(GridGenerator.netconvert_command,
+        command = GridGenerator.netconvert_command
+
+        if verbosity_level > 0:
+            command.append('--verbose')
+            print(' '.join(command))
+
+        process = subprocess.Popen(command,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
+
         output, error = process.communicate()
 
-        if output:
+        if output and verbosity_level > 0:
             print(output.decode())
         if error:
             print(error.decode())

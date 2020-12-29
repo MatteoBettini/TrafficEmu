@@ -79,7 +79,7 @@ class RandomTripGenerator:
                                    stderr=subprocess.PIPE)
         output, error = process.communicate()
 
-        if output:
+        if output and verbosity_level > 0:
             print(output.decode())
         if error:
             print(error.decode())
