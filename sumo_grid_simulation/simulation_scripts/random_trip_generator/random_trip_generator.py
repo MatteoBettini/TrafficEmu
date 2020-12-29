@@ -63,6 +63,8 @@ class RandomTripGenerator:
         if seed is not None:
             python_command.append('--seed')
             python_command.append(str(int(seed)))
+        else:
+            python_command.append('--random')
 
         if use_binomial is True:
             python_command.append('--binomial')
