@@ -3,8 +3,8 @@ from xml.dom.minidom import Document, Element
 
 from pathlib import Path
 
-from simulation_scripts.enums import VehicleClasses, EmmissionClasses
-from simulation_scripts.utils import PathUtils
+from sumo_grid_simulation.simulation_scripts.enums import VehicleClasses, EmmissionClasses
+from sumo_grid_simulation.simulation_scripts.utils import PathUtils
 
 
 class Vehicle:

@@ -2,8 +2,8 @@ import os
 import subprocess
 
 
-from simulation_scripts.enums import VehicleClasses
-from simulation_scripts.utils import PathUtils
+from sumo_grid_simulation.simulation_scripts.enums import VehicleClasses
+from sumo_grid_simulation.simulation_scripts.utils import PathUtils
 
 class RandomTripGenerator:
 

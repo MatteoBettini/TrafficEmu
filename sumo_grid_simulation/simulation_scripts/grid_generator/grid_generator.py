@@ -2,8 +2,8 @@ from xml.dom import minidom
 import math
 from xml.dom.minidom import Document
 import subprocess
-from simulation_scripts.enums import *
-from simulation_scripts.utils import PathUtils
+from sumo_grid_simulation.simulation_scripts.enums import *
+from sumo_grid_simulation.simulation_scripts.utils import PathUtils
 
 """
     This class generates grid networks for sumo
