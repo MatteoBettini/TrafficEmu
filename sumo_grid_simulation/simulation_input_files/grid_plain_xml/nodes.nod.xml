@@ -1,63 +1,24 @@
 <?xml version="1.0" ?>
 <nodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/nodes_file.xsd">
 	<node id="n1" x="0" y="0" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n2" x="50" y="0" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n3" x="50" y="50" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n4" x="0" y="50" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n5" x="100" y="0" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n6" x="100" y="50" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n7" x="100" y="100" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n8" x="50" y="100" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n9" x="0" y="100" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n10" x="150" y="0" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n11" x="150" y="50" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n12" x="150" y="100" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n13" x="150" y="150" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n14" x="100" y="150" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n15" x="50" y="150" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n16" x="0" y="150" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n17" x="200" y="0" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n18" x="200" y="50" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n19" x="200" y="100" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n20" x="200" y="150" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n21" x="200" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n22" x="150" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n23" x="100" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n24" x="50" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n25" x="0" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n26" x="250" y="0" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n27" x="250" y="50" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n28" x="250" y="100" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n29" x="250" y="150" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n30" x="250" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n31" x="250" y="250" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n32" x="200" y="250" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n33" x="150" y="250" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n34" x="100" y="250" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n35" x="50" y="250" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="n36" x="0" y="250" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
-	<node id="o1" x="0" y="-50" type="priority"/>
-	<node id="o2" x="50" y="-50" type="priority"/>
-	<node id="o3" x="100" y="-50" type="priority"/>
-	<node id="o4" x="150" y="-50" type="priority"/>
-	<node id="o5" x="200" y="-50" type="priority"/>
-	<node id="o6" x="250" y="-50" type="priority"/>
-	<node id="o7" x="300" y="0" type="priority"/>
-	<node id="o8" x="300" y="50" type="priority"/>
-	<node id="o9" x="300" y="100" type="priority"/>
-	<node id="o10" x="300" y="150" type="priority"/>
-	<node id="o11" x="300" y="200" type="priority"/>
-	<node id="o12" x="300" y="250" type="priority"/>
-	<node id="o13" x="250" y="300" type="priority"/>
-	<node id="o14" x="200" y="300" type="priority"/>
-	<node id="o15" x="150" y="300" type="priority"/>
-	<node id="o16" x="100" y="300" type="priority"/>
-	<node id="o17" x="50" y="300" type="priority"/>
-	<node id="o18" x="0" y="300" type="priority"/>
-	<node id="o19" x="-50" y="250" type="priority"/>
-	<node id="o20" x="-50" y="200" type="priority"/>
-	<node id="o21" x="-50" y="150" type="priority"/>
-	<node id="o22" x="-50" y="100" type="priority"/>
-	<node id="o23" x="-50" y="50" type="priority"/>
-	<node id="o24" x="-50" y="0" type="priority"/>
+	<node id="n2" x="200" y="0" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n3" x="200" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n4" x="0" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n5" x="400" y="0" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n6" x="400" y="200" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n7" x="400" y="400" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n8" x="200" y="400" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="n9" x="0" y="400" type="priority" tlType="actuated" tlLayout="opposites" keepClear="true"/>
+	<node id="o1" x="0" y="-200" type="priority"/>
+	<node id="o2" x="200" y="-200" type="priority"/>
+	<node id="o3" x="400" y="-200" type="priority"/>
+	<node id="o4" x="600" y="0" type="priority"/>
+	<node id="o5" x="600" y="200" type="priority"/>
+	<node id="o6" x="600" y="400" type="priority"/>
+	<node id="o7" x="400" y="600" type="priority"/>
+	<node id="o8" x="200" y="600" type="priority"/>
+	<node id="o9" x="0" y="600" type="priority"/>
+	<node id="o10" x="-200" y="400" type="priority"/>
+	<node id="o11" x="-200" y="200" type="priority"/>
+	<node id="o12" x="-200" y="0" type="priority"/>
 </nodes>
