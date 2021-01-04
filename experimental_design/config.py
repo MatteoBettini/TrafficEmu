@@ -3,6 +3,7 @@ from statistics import mean
 from easydict import EasyDict as edict
 import numpy as np
 
+
 def __find_nearest(array, value):
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
@@ -25,22 +26,54 @@ __C.PARAMETERS_OPTS.ACCEL = [1., 6.]
 # Parameters
 __C.PARAMETERS = edict()
 
-__C.PARAMETERS.GRID_SIZE = ContinuousParameter('gridSize', min_value=min(__C.PARAMETERS_OPTS.GRID_SIZE), max_value=max(__C.PARAMETERS_OPTS.GRID_SIZE))
-__C.PARAMETERS.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed', min_value=min(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED), max_value=max(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED))
-__C.PARAMETERS.MAX_SPEED = ContinuousParameter('maxSpeed', min_value=min(__C.PARAMETERS_OPTS.MAX_SPEED), max_value=max(__C.PARAMETERS_OPTS.MAX_SPEED))
-__C.PARAMETERS.EDGE_LENGTH = ContinuousParameter('edgeLength', min_value=min(__C.PARAMETERS_OPTS.EDGE_LENGTH), max_value=max(__C.PARAMETERS_OPTS.EDGE_LENGTH))
-__C.PARAMETERS.NUM_LANES = DiscreteParameter('numberOfLanes', domain=__C.PARAMETERS_OPTS.NUM_LANES)
-__C.PARAMETERS.ACCEL = ContinuousParameter('accel', min_value=min(__C.PARAMETERS_OPTS.ACCEL), max_value=max(__C.PARAMETERS_OPTS.ACCEL))
+__C.PARAMETERS.GRID_SIZE = ContinuousParameter('gridSize', 
+    min_value=min(__C.PARAMETERS_OPTS.GRID_SIZE), 
+    max_value=max(__C.PARAMETERS_OPTS.GRID_SIZE))
+__C.PARAMETERS.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed', 
+    min_value=min(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED), 
+    max_value=max(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED))
+__C.PARAMETERS.MAX_SPEED = ContinuousParameter('maxSpeed', 
+    min_value=min(__C.PARAMETERS_OPTS.MAX_SPEED), 
+    max_value=max(__C.PARAMETERS_OPTS.MAX_SPEED))
+__C.PARAMETERS.EDGE_LENGTH = ContinuousParameter('edgeLength', 
+    min_value=min(__C.PARAMETERS_OPTS.EDGE_LENGTH), 
+    max_value=max(__C.PARAMETERS_OPTS.EDGE_LENGTH))
+__C.PARAMETERS.NUM_LANES = DiscreteParameter('numberOfLanes', 
+    domain=__C.PARAMETERS_OPTS.NUM_LANES)
+__C.PARAMETERS.ACCEL = ContinuousParameter('accel', 
+    min_value=min(__C.PARAMETERS_OPTS.ACCEL), 
+    max_value=max(__C.PARAMETERS_OPTS.ACCEL))
 
 # OFAT Parameters
 __C.OFAT = edict()
 
-__C.OFAT.GRID_SIZE = ContinuousParameter('gridSize', min_value=mean(__C.PARAMETERS_OPTS.GRID_SIZE), max_value=mean(__C.PARAMETERS_OPTS.GRID_SIZE))
-__C.OFAT.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed', min_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED), max_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED))
-__C.OFAT.MAX_SPEED = ContinuousParameter('maxSpeed', min_value=mean(__C.PARAMETERS_OPTS.MAX_SPEED), max_value=mean(__C.PARAMETERS_OPTS.MAX_SPEED))
-__C.OFAT.EDGE_LENGTH = ContinuousParameter('edgeLength', min_value=mean(__C.PARAMETERS_OPTS.EDGE_LENGTH), max_value=mean(__C.PARAMETERS_OPTS.EDGE_LENGTH))
-__C.OFAT.NUM_LANES = DiscreteParameter('numberOfLanes', domain=[__find_nearest(__C.PARAMETERS_OPTS.NUM_LANES, mean(__C.PARAMETERS_OPTS.NUM_LANES))])
-__C.OFAT.ACCEL = ContinuousParameter('accel', min_value=mean(__C.PARAMETERS_OPTS.ACCEL), max_value=mean(__C.PARAMETERS_OPTS.ACCEL))
+__C.OFAT.GRID_SIZE = ContinuousParameter('gridSize', 
+    min_value=mean(__C.PARAMETERS_OPTS.GRID_SIZE), 
+    max_value=mean(__C.PARAMETERS_OPTS.GRID_SIZE))
+__C.OFAT.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed', 
+    min_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED), 
+    max_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED))
+__C.OFAT.MAX_SPEED = ContinuousParameter('maxSpeed', 
+    min_value=mean(__C.PARAMETERS_OPTS.MAX_SPEED), 
+    max_value=mean(__C.PARAMETERS_OPTS.MAX_SPEED))
+__C.OFAT.EDGE_LENGTH = ContinuousParameter('edgeLength', 
+    min_value=mean(__C.PARAMETERS_OPTS.EDGE_LENGTH), 
+    max_value=mean(__C.PARAMETERS_OPTS.EDGE_LENGTH))
+__C.OFAT.NUM_LANES = DiscreteParameter('numberOfLanes', 
+    domain=[__find_nearest(__C.PARAMETERS_OPTS.NUM_LANES, mean(__C.PARAMETERS_OPTS.NUM_LANES))])
+__C.OFAT.ACCEL = ContinuousParameter('accel', 
+    min_value=mean(__C.PARAMETERS_OPTS.ACCEL), 
+    max_value=mean(__C.PARAMETERS_OPTS.ACCEL))
+
+# Human readable parameter names
+__C.NAMES = edict()
+
+__C.NAMES.GRID_SIZE = 'Grid Size'
+__C.NAMES.EDGE_MAX_SPEED = 'Edge Max Speed (m/s)'
+__C.NAMES.MAX_SPEED = 'Vehicle Max Speed (m/s)'
+__C.NAMES.EDGE_LENGTH = 'Edge Length (m)'
+__C.NAMES.NUM_LANES = 'Number of Lanes'
+__C.NAMES.ACCEL = 'Acceleration (m/s$^2$)'
 
 
 def get_parameter_space():
@@ -53,8 +86,9 @@ def get_parameter_space():
 
     return ParameterSpace([gridSize, edgeMaxSpeed, maxSpeed, edgeLength, numberOfLanes, accel])
 
+
 def get_ofat_parameter_spaces():
-    
+
     def get_parameter(name: str, mode: str):
         if mode == 'locked':
             return __C['OFAT'][name]
@@ -66,9 +100,14 @@ def get_ofat_parameter_spaces():
         parameter_space = []
         for j in __C.PARAMETERS_OPTS.items():
             if i[0] == j[0]:
-                mode = 'open'
+                mode = 'variable'
             else:
                 mode = 'locked'
             parameter_space.append(get_parameter(j[0], mode))
-        parameter_spaces.append(ParameterSpace(parameter_space))
+        parameter_spaces.append(
+            {
+                'space': ParameterSpace(parameter_space),
+                'name': __C.NAMES[i[0]]
+            }
+        )
     return parameter_spaces
