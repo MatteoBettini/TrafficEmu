@@ -197,13 +197,17 @@ class Simulator:
     def run(self):
         """ traci control loop that runs the simulation """
         step = 0
-        while traci.simulation.getMinExpectedNumber() > 0:
-            traci.simulationStep()
-            if self.verbosity_level > 0:
-                print(f'Simulation step N°{step}')
-            step += 1
-        traci.close()
-        sys.stdout.flush()
+
+        try:
+            while traci.simulation.getMinExpectedNumber() > 0:
+                traci.simulationStep()
+                if self.verbosity_level > 0:
+                    print(f'Simulation step N°{step}')
+                step += 1
+        finally:
+
+            traci.close()
+            sys.stdout.flush()
 
 
 if __name__ == '__main__':
