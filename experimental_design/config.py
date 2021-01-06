@@ -18,8 +18,8 @@ __C.PARAMETERS_OPTS = edict()
 
 __C.PARAMETERS_OPTS.GRID_SIZE = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 __C.PARAMETERS_OPTS.EDGE_MAX_SPEED = [8, 25]  # 28.8 km/h to 90 km/h
-__C.PARAMETERS_OPTS.MAX_SPEED = [5, 50]  # 18 km/h to 180 km/h
-__C.PARAMETERS_OPTS.EDGE_LENGTH = [30, 150]  # 30 meters to 150 meters
+__C.PARAMETERS_OPTS.MAX_SPEED = [5, 27]  # 18 km/h to 144 km/h
+__C.PARAMETERS_OPTS.EDGE_LENGTH = [30, 70]  # 30 meters to 150 meters
 __C.PARAMETERS_OPTS.NUM_LANES = [1, 2, 3]
 __C.PARAMETERS_OPTS.ACCEL = [1.5, 5]  # 1.5 m/s^2 to 5 m/s^2
 
