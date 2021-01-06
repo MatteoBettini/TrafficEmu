@@ -16,9 +16,8 @@ class Simulator:
     vehicle_id = 'veh_passenger'
 
     def __init__(self, show_gui=False, seed=42, step_delay: int = 0, verbosity_level: int = 0,
-                 begin_time: float = 0, end_time: float = 3600,
-                 trips_generator_period: float = 0.5, trips_generator_fringe_factor: float = 10,
-                 trips_generator_binomial: int = 1, trips_generator_use_binomial: bool = True):
+                 begin_time: float = 0, end_time: float = 3600, trips_generator_fringe_factor: float = 10,
+                 trips_generator_binomial: int = 1, trips_generator_use_binomial: bool = False):
         """
         :param show_gui: show gui with simulation? requires `sumo-gui` installed
         :param step_delay: ms between each simulation step (for debugging)
@@ -30,7 +29,6 @@ class Simulator:
         self.begin_time = begin_time
         self.end_time = end_time
 
-        self.trips_generator_period = trips_generator_period
         self.trips_generator_fringe_factor = trips_generator_fringe_factor
         self.trips_generator_binomial = trips_generator_binomial
         self.trips_generator_use_binomial = trips_generator_use_binomial
@@ -64,10 +62,12 @@ class Simulator:
             maxSpeed: float = 55.55,
             speedFactor: float = 1.0,
             speedDev: float = 0.1,
+            trips_generator_period: float = 0.5
     ):
         """
         The user function that feeds into emukit.
 
+        :param trips_generator_period:
         :param speedDev:
         :param speedFactor:
         :param maxSpeed:
@@ -130,7 +130,7 @@ class Simulator:
             seed=self.seed,
             begin_time=self.begin_time,
             end_time=self.end_time,
-            period=self.trips_generator_period,
+            period=trips_generator_period,
             binomial=self.trips_generator_binomial,
             fringe_factor=self.trips_generator_fringe_factor,
             use_binomial=self.trips_generator_use_binomial,
@@ -216,7 +216,17 @@ if __name__ == '__main__':
                           default=True, help='run the commandline version of sumo')
     options, args = opt_parser.parse_args()
 
-    simulator = Simulator(options.showgui, step_delay=30)
+    edgeLength = 150
+    gridSize = 20
+    alpha = 0.1
 
-    out = simulator.simulate(6)
+    max_number_of_vehicles = ((gridSize - 1) * gridSize * 2 + 4 * gridSize) * edgeLength / 5
+
+    period = 300/(max_number_of_vehicles * alpha)
+    print(period)
+
+    simulator = Simulator(options.showgui, step_delay=20, end_time=300)
+
+    # Trial in worst case scenario
+    out = simulator.simulate(gridSize=gridSize, edgeLength=edgeLength, maxSpeed=5, edgeMaxSpeed=8, numberOfLanes=1, accel=1.5, trips_generator_period=period)
     print(out)
