@@ -46,8 +46,9 @@ __C.PARAMETERS.ACCEL = ContinuousParameter('accel',
 # OFAT Parameters
 __C.OFAT = edict()
 
-__C.OFAT.GRID_SIZE = DiscreteParameter('gridSize',
-    domain=[__find_nearest(__C.PARAMETERS_OPTS.GRID_SIZE, mean(__C.PARAMETERS_OPTS.GRID_SIZE))])
+__C.OFAT.GRID_SIZE = ContinuousParameter('gridSize',
+    min_value=mean(__C.PARAMETERS_OPTS.GRID_SIZE),
+    max_value=mean(__C.PARAMETERS_OPTS.GRID_SIZE))
 __C.OFAT.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed',
     min_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED),
     max_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED))
