@@ -46,22 +46,77 @@ __C.PARAMETERS.ACCEL = ContinuousParameter('accel',
 # OFAT Parameters
 __C.OFAT = edict()
 
+# __C.OFAT.GRID_SIZE = DiscreteParameter('gridSize',
+#     domain=[__find_nearest(__C.PARAMETERS_OPTS.GRID_SIZE, mean(__C.PARAMETERS_OPTS.GRID_SIZE))])
+# __C.OFAT.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed',
+#     min_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED),
+#     max_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED))
+# __C.OFAT.MAX_SPEED = ContinuousParameter('maxSpeed',
+#     min_value=mean(__C.PARAMETERS_OPTS.MAX_SPEED),
+#     max_value=mean(__C.PARAMETERS_OPTS.MAX_SPEED))
+# __C.OFAT.EDGE_LENGTH = ContinuousParameter('edgeLength',
+#     min_value=mean(__C.PARAMETERS_OPTS.EDGE_LENGTH),
+#     max_value=mean(__C.PARAMETERS_OPTS.EDGE_LENGTH))
+# __C.OFAT.NUM_LANES = DiscreteParameter('numberOfLanes',
+#     domain=[__find_nearest(__C.PARAMETERS_OPTS.NUM_LANES, mean(__C.PARAMETERS_OPTS.NUM_LANES))])
+# __C.OFAT.ACCEL = ContinuousParameter('accel',
+#     min_value=mean(__C.PARAMETERS_OPTS.ACCEL),
+#     max_value=mean(__C.PARAMETERS_OPTS.ACCEL))
+
 __C.OFAT.GRID_SIZE = DiscreteParameter('gridSize',
-    domain=[__find_nearest(__C.PARAMETERS_OPTS.GRID_SIZE, mean(__C.PARAMETERS_OPTS.GRID_SIZE))])
+    domain=[20])
 __C.OFAT.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed',
-    min_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED),
-    max_value=mean(__C.PARAMETERS_OPTS.EDGE_MAX_SPEED))
+    min_value=25,
+    max_value=25)
 __C.OFAT.MAX_SPEED = ContinuousParameter('maxSpeed',
-    min_value=mean(__C.PARAMETERS_OPTS.MAX_SPEED),
-    max_value=mean(__C.PARAMETERS_OPTS.MAX_SPEED))
+    min_value=5,
+    max_value=5)
 __C.OFAT.EDGE_LENGTH = ContinuousParameter('edgeLength',
-    min_value=mean(__C.PARAMETERS_OPTS.EDGE_LENGTH),
-    max_value=mean(__C.PARAMETERS_OPTS.EDGE_LENGTH))
+    min_value=70,
+    max_value=70)
 __C.OFAT.NUM_LANES = DiscreteParameter('numberOfLanes',
-    domain=[__find_nearest(__C.PARAMETERS_OPTS.NUM_LANES, mean(__C.PARAMETERS_OPTS.NUM_LANES))])
+    domain=[1])
 __C.OFAT.ACCEL = ContinuousParameter('accel',
-    min_value=mean(__C.PARAMETERS_OPTS.ACCEL),
-    max_value=mean(__C.PARAMETERS_OPTS.ACCEL))
+    min_value=1.5,
+    max_value=1.5)
+
+__C.OFAT.TIME = edict()
+
+__C.OFAT.TIME.GRID_SIZE = DiscreteParameter('gridSize',
+    domain=[20])
+__C.OFAT.TIME.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed',
+    min_value=8,
+    max_value=8)
+__C.OFAT.TIME.MAX_SPEED = ContinuousParameter('maxSpeed',
+    min_value=5,
+    max_value=5)
+__C.OFAT.TIME.EDGE_LENGTH = ContinuousParameter('edgeLength',
+    min_value=70,
+    max_value=70)
+__C.OFAT.TIME.NUM_LANES = DiscreteParameter('numberOfLanes',
+    domain=[1])
+__C.OFAT.TIME.ACCEL = ContinuousParameter('accel',
+    min_value=1.5,
+    max_value=1.5)
+
+__C.OFAT.CO2 = edict()
+
+__C.OFAT.CO2.GRID_SIZE = DiscreteParameter('gridSize',
+    domain=[20])
+__C.OFAT.CO2.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed',
+    min_value=25,
+    max_value=25)
+__C.OFAT.CO2.MAX_SPEED = ContinuousParameter('maxSpeed',
+    min_value=5,
+    max_value=5)
+__C.OFAT.CO2.EDGE_LENGTH = ContinuousParameter('edgeLength',
+    min_value=70,
+    max_value=70)
+__C.OFAT.CO2.NUM_LANES = DiscreteParameter('numberOfLanes',
+    domain=[1])
+__C.OFAT.CO2.ACCEL = ContinuousParameter('accel',
+    min_value=1.5,
+    max_value=1.5)
 
 # Human readable parameter names
 __C.NAMES = edict()
@@ -85,11 +140,14 @@ def get_parameter_space():
     return ParameterSpace([gridSize, edgeMaxSpeed, maxSpeed, edgeLength, numberOfLanes, accel])
 
 
-def get_ofat_parameter_spaces():
+def get_ofat_parameter_spaces(variant=None):
 
     def get_parameter(name: str, mode: str):
         if mode == 'locked':
-            return __C['OFAT'][name]
+            if variant==None:
+                return __C['OFAT'][name]
+            else:
+                return __C['OFAT'][variant][name]
         else:
             return __C['PARAMETERS'][name]
 
