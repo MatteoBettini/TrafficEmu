@@ -45,7 +45,7 @@ class Simulator:
             self,
             # grid generation params
             gridSize: int,
-            junctionType: int = 1,
+            junctionType: int = 2,
             tlType: int = 2,
             tlLayout: int = 1,
             edgeMaxSpeed: float = 13.9,
@@ -216,9 +216,9 @@ if __name__ == '__main__':
                           default=True, help='run the commandline version of sumo')
     options, args = opt_parser.parse_args()
 
-    edgeLength = 150
+    edgeLength = 70
     gridSize = 20
-    alpha = 0.1
+    alpha = 0.20
 
     max_number_of_vehicles = ((gridSize - 1) * gridSize * 2 + 4 * gridSize) * edgeLength / 5
 
@@ -228,5 +228,5 @@ if __name__ == '__main__':
     simulator = Simulator(options.showgui, step_delay=20, end_time=300)
 
     # Trial in worst case scenario
-    out = simulator.simulate(gridSize=gridSize, edgeLength=edgeLength, maxSpeed=5, edgeMaxSpeed=8, numberOfLanes=1, accel=1.5, trips_generator_period=period)
+    out = simulator.simulate(gridSize=gridSize, edgeLength=edgeLength, edgeMaxSpeed=8, numberOfLanes=1, accel=1.5, trips_generator_period=period)
     print(out)
