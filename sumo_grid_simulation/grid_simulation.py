@@ -45,7 +45,7 @@ class Simulator:
             self,
             # grid generation params
             gridSize: int,
-            junctionType: int = 2,
+            junctionType: int = 1,
             tlType: int = 2,
             tlLayout: int = 1,
             edgeMaxSpeed: float = 13.9,
