@@ -54,15 +54,12 @@ if __name__ == '__main__':
     else:
         sumoBinary = checkBinary('sumo-gui')
 
-    print()
+
     # traci starts sumo as a subprocess and then this script connects and runs
     traci.start([sumoBinary, '--configuration-file', simulation_file,
                  '--start',
                  '--seed', str(simulation_seed),
                  '--delay', str(simulation_delay),
-                 '--gui-settings-file', custom_gui_view_file,
-                 '--quit-on-end',
-                 '--tripinfo-output', trip_info_file,
-                 '--statistics-output', statistics_file])
+                 '--quit-on-end'])
 
     run()
