@@ -56,38 +56,6 @@ __C.OFAT.ACCEL = ContinuousParameter('accel',
     min_value=1.5,
     max_value=1.5)
 
-__C.OFAT.TIME = edict()
-
-__C.OFAT.TIME.GRID_SIZE = DiscreteParameter('gridSize',
-    domain=[20])
-__C.OFAT.TIME.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed',
-    min_value=8,
-    max_value=8)
-__C.OFAT.TIME.EDGE_LENGTH = ContinuousParameter('edgeLength',
-    min_value=70,
-    max_value=70)
-__C.OFAT.TIME.NUM_LANES = DiscreteParameter('numberOfLanes',
-    domain=[1])
-__C.OFAT.TIME.ACCEL = ContinuousParameter('accel',
-    min_value=1.5,
-    max_value=1.5)
-
-__C.OFAT.CO2 = edict()
-
-__C.OFAT.CO2.GRID_SIZE = DiscreteParameter('gridSize',
-    domain=[20])
-__C.OFAT.CO2.EDGE_MAX_SPEED = ContinuousParameter('edgeMaxSpeed',
-    min_value=25,
-    max_value=25)
-__C.OFAT.CO2.EDGE_LENGTH = ContinuousParameter('edgeLength',
-    min_value=70,
-    max_value=70)
-__C.OFAT.CO2.NUM_LANES = DiscreteParameter('numberOfLanes',
-    domain=[1])
-__C.OFAT.CO2.ACCEL = ContinuousParameter('accel',
-    min_value=1.5,
-    max_value=1.5)
-
 # Human readable parameter names
 __C.NAMES = edict()
 
@@ -125,13 +93,10 @@ def get_ofat_parameter_spaces_from_results(df):
         )
     return parameter_spaces
 
-def get_ofat_parameter_spaces(variant=None):
+def get_ofat_parameter_spaces():
     def get_parameter(name: str, mode: str):
         if mode == 'locked':
-            if variant==None:
-                return __C['OFAT'][name]
-            else:
-                return __C['OFAT'][variant][name]
+            return __C['OFAT'][name]
         else:
             return __C['PARAMETERS'][name]
 
