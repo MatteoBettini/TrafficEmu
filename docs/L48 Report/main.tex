@@ -1,0 +1,276 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2020
+
+% ready for submission
+%\usepackage{neurips_2020}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2020}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2020}
+
+% to avoid loading the natbib package, add option nonatbib:
+\usepackage{natbib}
+\usepackage[final]{neurips_2020}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{amsmath}
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{hyperref}
+\usepackage{soul}
+\usepackage{etoolbox}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{tabu}
+\usepackage[dvipsnames, table,xcdraw]{xcolor}
+\usepackage{etoolbox,refcount}
+\usepackage{multicol}
+\usepackage[font={small,it}]{caption}
+\usepackage{subcaption}
+\usepackage[title]{appendix}
+
+\newcounter{countitems}
+\newcounter{nextitemizecount}
+\newcommand{\setupcountitems}{%
+  \stepcounter{nextitemizecount}%
+  \setcounter{countitems}{0}%
+  \preto\item{\stepcounter{countitems}}%
+}
+\makeatletter
+\newcommand{\computecountitems}{%
+  \edef\@currentlabel{\number\c@countitems}%
+  \label{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+}
+\newcommand{\nextitemizecount}{%
+  \getrefnumber{countitems@\number\c@nextitemizecount}%
+}
+\newcommand{\previtemizecount}{%
+  \getrefnumber{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+}
+\graphicspath{ {./images/} }
+\makeatother    
+\newenvironment{AutoMultiColItemize}{%
+\ifnumcomp{\nextitemizecount}{>}{3}{\begin{multicols}{2}}{}%
+\setupcountitems\begin{itemize}}%
+{\end{itemize}%
+\unskip\computecountitems\ifnumcomp{\previtemizecount}{>}{3}{\end{multicols}}{}}
+
+\title{Analysing Traffic through Emulation}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+\newbool{showComments}
+\booltrue{showComments}
+% \boolfalse{showComments}
+
+\ifbool{showComments}{%
+\newcommand{\harry}[1]{\sethlcolor{green}\hl{[Harry: #1]}}
+\newcommand{\matteo}[1]{\sethlcolor{red}\hl{[Matteo: #1]}}
+\newcommand{\nicholas}[1]{\sethlcolor{cyan}\hl{[Nicholas: #1]}}
+\newcommand{\new}[1]{\textcolor{blue}{#1}}
+}{
+\newcommand{\harry}[1]{}
+\newcommand{\del}[1]{}
+\newcommand{\new}[1]{}
+}
+\author{%
+  Matteo Bettini \\
+  mb2389 \\
+  Sidney Sussex College\\
+  % examples of more authors
+  \And
+  Nicholas Kastanos \\
+  nk569 \\
+  Queens' College \\
+  \And
+  Harry Songhurst \\
+  hs778 \\
+  St Edmund's College \\
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    Urban planning and traffic management is a growing issue. In order to plan for rapidly urbanising populations, government agencies and local councils need to consider multiple factors, including traffic flow and air quality. Traditional large-scale traffic simulations are resource and time-intensive, especially when simulating microscopic details. Gaussian Processes fitted to simulation data can be used to model the input-output relationships of the system without the complexity of the simulator. In this project, the SUMO traffic simulator is used to create traffic flow and carbon dioxide emulation models for city-centre-like grid road networks through Experimental Design. Once the models have been developed, Bayesian Optimisation techniques are used to locate the optimal configuration of each model to reduce time lost by vehicles, and CO$_2$ emissions. The sensitivity of the models to each input parameter is then analysed. It is shown that the optimal operating point has low maximum vehicle speeds and accelerations, with long road lengths. An important trade-off exists between the two outputs with respect to the city size. The most significant input is the maximum vehicle speed.
+\end{abstract}
+
+
+% \harry{Targeting about 4000 words}
+
+\section{Introduction and Motivation}
+\input{sections/introduction}
+
+
+% \subsection{Related Work}
+
+\section{Background}
+\label{sec:background}
+\input{sections/background}
+
+
+
+
+\section{Simulation}
+\label{sec:simulation}
+\input{sections/simulation}
+
+
+
+
+
+
+\section{Experimental Setup}
+\label{sec:exp-setup}
+
+Each simulation we ran relied on SUMO, and an interface we wrote allowing us to dynamically vary properties of vehicles, maps and aspects of the environment such as traffic light timing. This allowed us to analyse the effect of various input parameters on various output parameters. For this project, we cared about the following SUMO-generated outputs:
+
+\begin{itemize}
+    \setlength\itemsep{0.05em}
+    \item average CO$_2$ released per car, per second.
+    \item average time lost per second due to driving slower than the ideal speed.
+\end{itemize}
+
+We analysed how these outputs were affected by the following inputs:
+
+\begin{itemize}
+    \setlength\itemsep{0.05em}
+    \item Edge Max Speed, $ 8 \le v_{max} \le 19$ %- legal speed limit in m/s - this \textit{can} be exceeded by vehicles which has a speed-factor greater than 1.
+    %\item maxSpeed - the absolute maximum velocity of any vehicle in m/s.
+    \item Edge Length, $30 \le L_E \le 70$ %- length of the roads between intersections in meters.
+    \item Number of Lanes, $N_L~\epsilon~\{1, 2, 3\}$ %- number of lanes per road.
+    \item Grid Size, $N_G~\epsilon~\{3, 4, \dots, 20\}$ %- the number of nodes on each side of the grid (see Section~\ref{sec:map_creation}).
+    \item Acceleration, $1.5 \le \alpha_V \le 5$ %- the acceleration ability of vehicles in m/s$^2$.
+\end{itemize}
+
+% \harry{This is wrong}
+It was important for us to normalize our outputs by a metric that controlled for the size of the grid, because larger grids result in longer travel times, and thus more emissions and lost time. We chose to normalize our outputs by the SUMO-generated ``duration" statistic - the average number of seconds cars were in transit for per simulation. This allowed us to explore more accurately the causal relationship between the above inputs and outputs.
+
+All experiments were conducted using Emukit \cite{emukit2019} - a Python framework for fitting emulators to simulators. Whilst Emukit is agnostic to the underlying statistical model, it has native integration with GPy \cite{gpy2014}, a Gaussian Process framework for Python. Emukit allowed us to conduct Experimental Design, Bayesian Optimisation, and Sensitivity Analysis. % which are used to create and analyse the emulators described in this paper.
+
+% \subsection{Acquisition Functions}
+% \label{sec:acquisiton}
+
+% Acquisition functions tell us where to sample our user function. All acquisition functions balance between exploitation and exploration \matteo{carefull, exploitation vs exploration is a concept needed only for bo, where you have to decide if you are happy wiith the minimum you found or explore more as you believe it is a local minimum}\matteo{i would treat the topic of acquiasition functions in the respective sections of ed and bo separately}; some favour sampling regions with high expected variance, whereas others favour regions with known `good' values \cite{siivolaGoodPracticesBayesian2020}. Different acquisition functions are suited to different tasks.
+
+% In the case of experimental design \ref{sec:experimental-design}, where we want to learn as much as possible about the underlying function, we may elect to use uncertainty sampling. Popularised by \cite{lewisHeterogeneousUncertaintySampling1994} \harry{couldn't find the OG paper... todo}, this function selects points which are predicted to produce outputs with high variance. Since Gaussian processes report predictive variance with each evaluation, they are a natural model choice for uncertainty sampling - we can specify an optimizer (usually gradient based) which finds points at which this predictive variance is maximal.
+
+% In the case of Bayesian optimization, where we want to minimize our user function, the `expected improvement' \cite{jonesEfficientGlobalOptimization} acquisition function is more typical. This function samples points which are expected to be lower than the previous best evaluation, whilst still allowing for exploration so as to avoid getting stuck in a local optima. \harry{maybe put a more mathematical definition?}.
+
+% We also considered Thompson sampling and Integrated Variance Reduction. \harry{if we do this}.
+
+
+
+
+
+\section{Experimental Design}
+\label{sec:experimental-design}
+\input{sections/Experimental Design}
+
+
+\section{Bayesian Optimization}
+\label{sec:bay_opt}
+\input{sections/bayesian_optimisation}
+
+\section{Sensitivity Analysis}
+\label{sec:sensitivity_analysis}
+
+In order to determine the significant inputs, sensitivity analysis is completed on the optimised emulators. Analyses are completed independently for time-loss and CO$_2$ emissions. This allows the important factors for each output to be discovered. OFAT and Global Sensitivity analysis are completed on each emulator.
+
+\begin{figure}[b!]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/main_effects.pdf}
+        \caption{Main Effects}
+        \label{fig:main_effects}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/total_effects.pdf}
+        \caption{Total Effects}
+        \label{fig:total_effects}
+    \end{subfigure}
+    \caption{Comparison of Sobol indices obtained from the time loss and $CO_2$ emulators}
+    \label{fig:sobol}
+\end{figure}
+
+\begin{figure}[t!]
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/edge_max_speed.pdf}
+        \caption{Edge Max Speed $v_{max}$}
+        \label{fig:edge-max-speed}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/edge_length.pdf}
+        \caption{Edge Length $L_E$}
+        \label{fig:edge-length}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/acceleration.pdf}
+        \caption{Maximum Acceleration $\alpha_V$}
+        \label{fig:acceleration}
+    \end{subfigure}
+    \caption{OFAT comparison of the emulators at the average operating point. Filled areas show one standard deviation of model variance.}
+    \label{fig:ofat}
+\end{figure}
+
+The first-order indices and total effects of each input variable is calculated for both emulators. This is completed using a model-based Monte-Carlo approach with $500000$ iterations. The OFAT analysis is conducted by randomly sampling 500 data-points for each input from the parameter space. All other parameters remain constant and are set to the average optimal operating point seen in Table~\ref{table:optimal_points}.
+
+Figure~\ref{fig:sobol} shows that edge max speed is the most significant input parameter to the system, as it contributes to more than half of the output variance. The other input parameters have very little impact on the system. Two exceptions are edge length in the time loss emulator, and acceleration in the CO$_2$ emulator. Figure~\ref{fig:ofat} shows the OFAT analysis of these input parameters, in which it can be seen that time loss is proportional to emissions.
+
+These results allow us to make interesting observations. High $v_{max}$ in an urban environment results in both high time losses and emissions. Time loss is increased because vehicles reach road junctions faster, and thus have to wait longer to proceed on their journey, which emissions are increased due to extended acceleration periods. Rapid acceleration and deceleration is considered a poor and dangerous driving practice. Figure~\ref{fig:acceleration} shows that this behaviour results in more time loss than if one were driving moderately. 
+
+
+\section{Future Work}
+
+Due to resource constraints, the emulators were developed using a limited number of initialisation and iteration datapoints. By increasing the number of datapoints used, the fidelity of the emulators can be increased. 
+
+Many cities are extremely large and dense, which can be simulated by larger grid sizes. Further research in this field can take these larger grids into account. Larger cities also incorporate multi-modal traffic. Future investigations in this area can include other vehicles such as public transport, pedestrians, and emergency vehicles. 
+
+To further test the advantages of microscopic traffic emulation, comparisons between mesoscopic traffic models and microscopic emulators could be done.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Two traffic emulators were designed for use in urban traffic management and road planning. These emulators are designed to model the time loss due to driving below the ideal speed, and CO$_2$ emissions. The emulators use gaussian processes as a surrogate model of a microscopic traffic simulator SUMO, developed using experimental design techniques. It was found that the Integrated Variance Reduction produced the models with the smallest RMSE using 20 randomly initialised points, followed by the experimental design loop with 500 iterations. 
+
+In order to find the minimum-output operating point for each emulator, Bayesian Optimisation with Expected Improvement point acquisition was used. The minimum operating points were very similar. The operating points are investigated using sensitivity analysis. It was found that the most significant parameter is the edge maximum speed, followed by edge length and maximum acceleration for time loss and CO$_2$ emissions respectively. 
+
+The analysis shows that low vehicle speeds in combination with long edges give ideal time loss and emission performance. Additionally, by increasing the number of road lanes, there is less time loss in the network. An important trade-off between time loss and emissions is also discovered when varying the network size. This pareto-optimality can lead to useful insights for urban planners.
+
+\newpage
+\bibliographystyle{unsrt}
+\bibliography{lib.bib}
+
+\newpage
+\begin{appendices}
+\section{Comparing OFAT between experimental design and Bayesian Optimisation}
+\label{appendix:comparison}
+\input{sections/appendix}
+\end{appendices}
+\end{document}

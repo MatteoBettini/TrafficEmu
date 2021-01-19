@@ -1,0 +1,85 @@
+\subsection{Traffic Simulation}
+
+% OLD The problem of traffic congestion has been studied for a long time in civil engineering \cite{wardrop1952road, lighthill1955kinematic}. Traffic congestion affects users' speed and, thus, travel time and pollution. The dependency between travel time and traffic density (flow) was observed in early studies \cite{greenshields1935study} and has been used in `Continuum traffic simulation' \cite{siebel2006fundamental} and in vehicles' routing \cite{wilkie2011self}.
+
+The problem of traffic congestion has been studied for a long time in civil engineering \cite{wardrop1952road, lighthill1955kinematic}. Traffic congestion affects users' speed and, thus, travel time and pollution. The dependency between travel time and traffic density (flow) was observed in early studies \cite{greenshields1935study} and more recent works \cite{siebel2006fundamental, wilkie2011self}.
+
+There are various approaches to model traffic congestion. In optimisation-based models, \cite{peeta1995system} traffic is represented as flow in a capacitated road network. They formalise the trade-off between user optimal assignment (minimising travel time) and system optimal assignment (avoiding congestion). Other approaches include analytic queuing models \cite{osorio2009analytic},  and simulation-based models \cite{treiber2000microscopic, krajzewicz2002sumo, balmer2009matsim}.
+
+Traffic simulation models can be divided into three main categories \cite{barcelo2010fundamentals}:
+
+\begin{itemize}
+    \item \textbf{Macroscopic traffic modeling} \cite{payne1979freflo}, where traffic is simulated at a system level with traffic density represented as continuous flows in the road network.
+    \item \textbf{Microscopic traffic modeling} \cite{barcelo2005microscopic} simulates traffic at a vehicle level. Each single vehicle can have different characteristics and parameters. This allows for detailed analyses on the interaction between different types of vehicles.
+    \item \textbf{Mesoscopic traffic modeling} \cite{burghout2006discrete} bridges the two approaches by providing a trade-off between simulation complexity and level of detail.
+\end{itemize}
+
+In this work we will look into microscopic traffic simulation as this type of simulators are the most computationally demanding having to simulate traffic at a vehicles' level. 
+
+After reviewing the available state of the microscopic traffic simulators \cite{w2016multi, barcelo2005dynamic, krajzewicz2002sumo} as well as literature surveys on the topic \cite{kotusevski2009review}, we chose to use SUMO \cite{krajzewicz2002sumo}.
+
+
+
+\subsection{Gaussian processes as surrogate models}
+
+Gaussian Processes (GPs) are non-parametric models which encode an infinite dimensional distribution over the space of functions. Not relying on parameters, they assign non-zero probability to every continuous function. They rely on a kernel function to encode the similarity between two points. The kernel function used in this work is the Radial Basis Function \cite{chen2003new}, seen in Equation \ref{eq:kernel}. It encodes the similarity between two input vectors $\mathbf{x}$ and $\mathbf{x'}$ with $\sigma$ being a free parameter.
+
+\begin{equation}
+    K(\mathbf{x},\mathbf{x'}) = \exp{\left ( -\frac{|| \mathbf{x}-\mathbf{x'}||^2 }{2\sigma^2}\right )}
+    \label{eq:kernel}
+\end{equation}
+
+
+Gaussian Processes are commonly used in regression models \cite{gramacy2020surrogates}. By fitting the GP to data gathered from a simulator, a low complexity surrogate model of the computationally complex simulation can be created \cite{sudret2017surrogate}. This surrogate model is referred to as an \textit{emulator}. The emulator learns the input-output relationship of the original model, however due to the difficulty of gathering data from computationally expensive simulators, the emulator has to be modelled using limited data.
+
+\subsubsection{Experimental Design} % Experimental design is a subsection of emulation
+
+In machine learning, supervised problems are those for which we learn an input-output mapping by fitting some model to a dataset of input-output examples \cite{SupervisedLearning2020}. In many cases, we do not have access to such a dataset, however, we may have the ability to collect input-output pairs on-the-fly. This is the setting where active learning, and indeed experimental design, excel. They use heuristics to guide their choice of input points to evaluate, in the hopes of learning as much as possible about the underlying function, thus enabling us to create an accurate surrogate model of said function. In the context of experimental design, these heuristics are known as \textit{acquisitions functions}, and in the case where the underlying function is a simulator, we say that the learned surrogate model is an \textit{emulator} if this model also reports how confident it is in its prediction.
+
+Since the purpose of experimental design is to learn as much as possible about the underlying function, we would like an acquisition function that picks points that tell us as much as possible about the underlying function. The two most popular choices are ``uncertainty sampling" and ``integrated variance reduction". Both methods rely on being able to evaluate the predictive variance of our model with respect to any particular input; since Gaussian Processes report this with each evaluation, they are a natural model choice for experimental design. Both methods rely on some form of iterative optimization, such as gradient descent, to find the next point in the domain which is predicted to either maximised (in the case of uncertainty sampling) or minimized (in the case of integrated variance reduction) \cite{EmukitExperimentalDesign2020} the function.
+
+Uncertainty sampling \cite{lewisHeterogeneousUncertaintySampling1994}, selects selects at which the emulator has high variance, with the rationale being that points with high variance are `interesting' and have more to be learned from than points we're already confident about. More formally, we wish to find points $\mathbf{x}$ at which the predictive variance $\sigma^{2}(\mathbf{x})$ of our model is maximal. In theory, high-variance regions of your learned function will be sampled frequently and therefore have their variance reduced. This should drive us to explore different points in the input domain which we know less about.
+
+% One of the benefits of using GPs as the basis of the emulator is that the predictive uncertainty of the surrogate model is known \cite{gramacy2020surrogates}. This allows one to minimize the predictive uncertainty of the model during data acquisition. This is known as Experimental Design. \nicholas{Maybe a theoretical explanation of the acquisition functions would be nice here}
+% \subsubsection{Integrated Variance Reduction (IVR)}
+
+Integrated variance reduction (IVR) lets us finds points in the input domain which reduce the total variance of the model. We use an optimization procedure such as gradient descent to find a point $\mathbf{x}$ which minimises a cost. This cost is the Monte-Carlo approximation of the total variance of the function, and is computed by randomly sampling some fixed number of points $\mathbb{X}$, then taking the summative difference in variance had $\mathbf{x}$ been observed  versus if it hadn\'t. Formally, the Monte-Carlo approximation takes following form \cite{EmukitExperimentalDesign2020, sacksDesignAnalysisComputer1989}:
+
+% \harry{This is copied https://mlatcl.github.io/mlphysical/lectures/04-02-emukit-and-experimental-design.html - is this acceptable w/ citation?}\nicholas{Probably not. Though there should be citations at the bottom of the page}
+
+
+\begin{equation}
+\begin{aligned}
+a_{I V R} &=
+& \approx \frac{1}{\text { samples }} \sum_{i}^{\text {samples} }\left[\sigma^{2}\left(\mathbf{x}_{i}\right)-\sigma^{2}\left(\mathbf{x}_{i} ; \mathbf{x}\right)\right]
+\end{aligned}
+\end{equation}
+
+
+\subsubsection{Bayesian Optimization}
+\label{sec:bo_background}
+
+% OLD  Bayesian Optimisation (BO) \cite{movckus1975bayesian} is a technique that allows to optimise an explicitly unknown function while minimising the number of evaluations of it. It works by iteratively querying the underlying function in order to discover new possible extreme points. By using a GP to model our belief of the underlying function, we can exploit the uncertainty of our knowledge to guide the search process. A major focus of this search is the balance between \textit{exploitation} and \textit{exploration}. Where \textit{exploitation} pushes towards exploring near the already known extreme point and \textit{exploration} incentives the investigation of areas with a high predictive variance as they could uncover a better extreme point. For this purpose an acquisition function is used. The acquisition function models the utility of evaluating a particular point for our task. 
+% \harry{rewrote slightly - please check}
+
+Bayesian Optimisation (BO) \cite{movckus1975bayesian} is a technique that allows for optimization of an explicitly unknown function while minimising the number of evaluations. It works by iteratively querying the underlying function with the objective of discovering new extreme points. By using a GP to quantify our beliefs in an underlying function, we can utilise the uncertainty in these beliefs to guide the search process. A major focus of this search is the balance between \textit{exploitation} and \textit{exploration}. Where \textit{exploitation} pushes towards exploring near the already known extreme point and \textit{exploration} incentives the investigation of areas with a high predictive variance, as they could uncover a better extreme point. For this purpose, an acquisition function is used. The acquisition function models the utility of evaluating a particular point for our task. 
+ 
+ The most commonly used acquisition function is Expected Improvement \cite{movckus1975bayesian}. The utility $u(x)$ of sampling one point using expected improvement is defined relative to how much lower we expect the function value at this point to be compared to the current best estimate.
+ 
+ \begin{equation}
+     u(x) = \max(0, f(x_*)-f(x))
+ \end{equation}
+ 
+The expected improvement is then computed by taking the expectation of the utility function over our current gaussian distribution of functions.
+
+
+\subsection{Sensitivity Analysis}
+
+One-factor-at-a-time analysis involves iteratively generating outputs from an emulator while moving a single input through its input range \cite{ravigupta2015, DELGARM2018181, SALTELLI20101508}. The remaining parameters are kept at a constant value. This is completed for each input variable. While this analysis is cheap to compute and provides easily understandable results, it only provides insight into a single output at a time. Additionally, the factor under investigation may have significantly different behaviour while at a different operating point.  
+
+As opposed to OFAT, global sensitivity analysis aims to take all inputs across its entire domain into consideration \cite{DELGARM2018181, saltelli2008global, SOBOL2001271}. The Hoeffding-Sobol decomposition allows Sobol indices to be calculated for any combination of input parameters. The first-order Sobol indices present a similar measure to OFAT, where the output variance is measured while a single input variable is changed. The Total Effects present the variance of the output attributed by the input variable and all of its interactions. This allows the full impact of the parameter to be observed. 
+
+% \harry{removed section on emukit and gpy and put it in exp setup - keep?}\nicholas{Keep}\matteo{i would keep too}
+% \subsection{Emukit and GPy}
+
+% Emukit \cite{emukit2019} is a Python framework for creating GP emulators from given simulators. Whilst Emukit is agnostic to the underlying statistical model, it has native integration with GPy \cite{gpy2014}, a Gaussian Process framework for Python. Emukit has native implementations of Experimental Design, Bayesian Optimisation, and Sensitivity Analysis, which are used to create and analyse the emulators described in this paper.
